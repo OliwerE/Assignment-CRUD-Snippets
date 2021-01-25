@@ -82,7 +82,7 @@ const startApplication = async () => {
     }
 
     // dev only: ta bort sen!
-    res.status(err.status || 500).render('errors/error', { error: err })
+    //res.status(err.status || 500).render('errors/error', { error: err })
   })
 
   application.listen(process.env.PORT, () => {
