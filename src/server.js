@@ -7,17 +7,19 @@
 
 import express from 'express'
 import hbs from 'express-hbs'
+import session from 'express-session'
+import helmet from 'helmet'
 import logger from 'morgan'
 import { dirname, join } from 'path'
-import { fileUrlToPath } from 'url'
-import { router } from './routes/router-js'
+import { fileURLToPath } from 'url'
+import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
 
 const startApplication = async () => {
   await connectDB() // ansluter till databasen
 
   const application = express()
-  const fullDirName = dirname(fileUrlToPath(import.meta.url))
+  const fullDirName = dirname(fileURLToPath(import.meta.url))
 
   application.use(helmet()) // extra säkerthet med http headers för bl.a xss!
 
