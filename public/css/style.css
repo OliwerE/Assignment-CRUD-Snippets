@@ -83,3 +83,18 @@ footer p {
 #snippetTable th, #snippetTable td {
     text-align: center;
 }
+
+/* New snippet page */
+
+#snippetFormContainer {
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+    background-color: green;
+}
+
+#snippetForm textarea {
+    width: 500px;
+    height: 300px;
+
+}

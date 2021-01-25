@@ -1,3 +1,15 @@
 <h1 class="pageHeader">
     Page: new snippet
 </h1>
+
+<div id="snippetFormContainer">
+    <form id="snippetForm" method="post" action="/new">
+        <!-- validation summary hbs här! -->
+        <div class="form-group">
+            Name: <input type="text" name="value" value="{{value}}" placeholder="Enter snippet name" required="required"/>
+        </div>
+        <textarea rows="4" cols="50" name="comment" form="snippetForm" required="required"></textarea>
+        <br>
+        <button type="submit">Create Snippet</button>
+    </form>
+</div>
