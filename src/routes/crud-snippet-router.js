@@ -15,5 +15,9 @@ const controller = new CrudSnippetController()
 
 router.get('/', controller.index)
 
+router.get('/snippets', controller.showSnippetsList)
+
+router.get('/snippets/new', controller.newSnippet)
+
  // catch 404: alltid som sista route!
  router.use('*', (req, res, next) => next(createError(404)))

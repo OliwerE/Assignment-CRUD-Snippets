@@ -9,4 +9,12 @@ export class CrudSnippetController {
     index (req, res, next) {
         res.render('crud-snippets/index')
     }
+
+    showSnippetsList (req, res, next) {
+        res.render('crud-snippets/snippets')        
+    }
+
+    newSnippet (req, res, next) {
+        res.render('crud-snippets/new')        
+    }
 }
