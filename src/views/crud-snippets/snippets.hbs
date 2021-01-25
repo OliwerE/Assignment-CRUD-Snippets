@@ -1,3 +1,26 @@
 <h1 class="pageHeader">
     Page: Snippets list
 </h1>
+
+<table id="snippetTable">
+    <thead>
+        <tr>
+            <th>created</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>        
+        {{#if viewData.snippets.length}} <-- om det finns snippets -->
+        {{#each viewData.snippets}}
+        <tr>
+            <th>{{this.createdAt}}</th>
+            <td>{{this.value}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td>Could not find snippets.</td>
+        </tr>
+        {{/if}}
+        </tbody>
+</table>

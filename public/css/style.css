@@ -71,3 +71,15 @@ footer p {
     font-family: "Comic Sans MS", "Comic Sans", cursive;
     margin-top: 14px;
 }
+
+/* Snippets page */
+
+#snippetTable {
+    margin: 0 auto;
+    /*background-color: green;*/
+    min-width: 600px;
+}
+
+#snippetTable th, #snippetTable td {
+    text-align: center;
+}
