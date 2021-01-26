@@ -98,3 +98,25 @@ footer p {
     height: 300px;
 
 }
+
+/* Login page */
+#loginContainerParent, #registerContainerParent {
+    text-align: center;
+    background-color: rgb(34, 181, 226);
+    height: 300px;
+    width: 400px;
+    margin: 0 auto;
+    border-radius: 30px;
+}
+
+#loginContainer, #registerContainer {
+    display: inline-block;
+    height: 100px;
+    width: 400px;
+    margin: 100px auto 0;
+}
+
+#loginContainer form input, #registerContainer form input {
+    display: block;
+    margin: 10px auto 0;
+}

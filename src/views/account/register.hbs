@@ -1,8 +1,12 @@
 <h1 class="pageHeader">
-    Page: Register
+    Register
 </h1>
-<form method="post" action="/register">
-    <input type="text" name="username" placeholder="Username" required/>
-    <input type="password" name="password" placeholder="Password" required/>
-    <input type="submit"/>
-</form>
+<div id="registerContainerParent">
+    <div id="registerContainer">
+        <form method="post" action="/register">
+            <input type="text" name="username" placeholder="Username" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <input type="submit" value="Create"/>
+        </form>
+    </div>
+</div>
