@@ -7,6 +7,7 @@
 
 export class CrudSnippetController {
     index (req, res, next) {
+        console.log(req.headers.cookie)
         res.render('crud-snippets/index')
     }
 
@@ -16,5 +17,9 @@ export class CrudSnippetController {
 
     newSnippet (req, res, next) {
         res.render('crud-snippets/new')        
+    }
+
+    loginPage (req, res, next) {
+        res.render('account/login')
     }
 }

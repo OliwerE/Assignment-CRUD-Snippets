@@ -19,5 +19,10 @@ router.get('/snippets', controller.showSnippetsList)
 
 router.get('/snippets/new', controller.newSnippet)
 
+// Login:
+router.get('/login', controller.loginPage)
+
+
+
  // catch 404: alltid som sista route!
  router.use('*', (req, res, next) => next(createError(404)))
