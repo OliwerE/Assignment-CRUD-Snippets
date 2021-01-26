@@ -11,13 +11,25 @@ import { CrudSnippetController } from '../controllers/crud-snippet-controller.js
 
 export const router = express.Router()
 
+
+const activeSessionCheck = (req, res, next) => {
+    if (!req.session.userId) {
+        res.redirect('/') // om anv inte är inloggad öppnas inte nästa sida, ist redirect till start.
+    } else {
+        next()
+    }
+}
+
+
+
+
 const controller = new CrudSnippetController()
 
 router.get('/', controller.index)
 
 router.get('/snippets', controller.showSnippetsList)
 
-router.get('/snippets/new', controller.newSnippet)
+router.get('/snippets/new', activeSessionCheck, controller.newSnippet) // fungerar endast om inloggad!
 
 // Login:
 router.get('/login', controller.loginPage)

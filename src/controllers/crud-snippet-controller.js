@@ -5,6 +5,8 @@
  * @version 1.0.0
  */
 
+import bcrypt from 'bcrypt'
+
 // TA BORT! tillfälliga "konton"
 const users = [// ANVÄND DATABAS!
     { id: 1, username: 'anv1', password: 'secret' },
@@ -31,15 +33,17 @@ export class CrudSnippetController {
         res.render('account/login')
     }
 
-    postLogin (req, res, next) {
+    async postLogin (req, res, next) {
         const username = req.body.username
         const password = req.body.password
 
         console.log('Username: ', username)
         console.log('Password: ', password)
 
+
         if (username && password !== undefined) {
             var thisUser = users.find(thisUser => thisUser.username === username && thisUser.password === password)
+            console.log(thisUser)
         }
 
         if (thisUser !== undefined) {
@@ -72,9 +76,9 @@ export class CrudSnippetController {
       res.render('account/register')
     }
 
-    registerAccount (req, res, next) {
+    async registerAccount (req, res, next) {
       const username = req.body.username
-      const password = req.body.password
+      const password = req.body.password //await bcrypt.hash(req.body.password, 8) // byt till bcrypt sen!
 
       console.log('Username: ', username)
       console.log('Password: ', password)

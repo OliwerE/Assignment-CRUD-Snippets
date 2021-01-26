@@ -102,7 +102,7 @@ footer p {
 /* Login page */
 #loginContainerParent, #registerContainerParent {
     text-align: center;
-    background-color: rgb(34, 181, 226);
+    background-color: #22b5e2;
     height: 300px;
     width: 400px;
     margin: 0 auto;
