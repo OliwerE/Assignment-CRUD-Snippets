@@ -14,11 +14,12 @@ const users = [// ANVÄND DATABAS!
 
 export class CrudSnippetController {
     index (req, res, next) {
-        console.log(req.headers.cookie)
+        //console.log(req.headers.cookie)
         res.render('crud-snippets/index')
     }
 
     showSnippetsList (req, res, next) {
+        console.log(users)
         res.render('crud-snippets/snippets')        
     }
 
@@ -85,7 +86,20 @@ export class CrudSnippetController {
       if (!uniqueUsernameCheck) { // Om användarnamnet inte existerar
         console.log('Does not exist!')
 
-        return
+        //skapar ny anv:
+        const newUser = {
+          id: users.length + 1,
+          username: username,
+          password: password
+        }
+
+        users.push(newUser) // Byt till mongoDB här!!
+
+        req.session.userId = newUser.id
+
+        console.log(users)
+
+        return res.redirect('/') // startsidan
       }
 
       console.log('Does EXIST!')
