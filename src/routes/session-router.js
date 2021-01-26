@@ -7,7 +7,7 @@
 
 import express from 'express'
 import createError from 'http-errors'
-import { CrudSnippetController } from '../controllers/crud-snippet-controller.js'
+import { SessionController } from '../controllers/session-controller.js'
 
 export const router = express.Router()
 
@@ -23,15 +23,8 @@ const activeSessionCheck = (req, res, next) => {
 
 
 
-const controller = new CrudSnippetController()
+const controller = new SessionController()
 
-router.get('/', controller.index)
-
-router.get('/snippets', controller.showSnippetsList)
-
-router.get('/snippets/new', activeSessionCheck, controller.newSnippet) // fungerar endast om inloggad!
-
-/*
 // Login:
 router.get('/login', controller.loginPage)
 router.post('/login', controller.postLogin)
@@ -42,7 +35,7 @@ router.post('/logout', controller.logout)
 // Register
 router.get('/register', controller.registerPage)
 router.post('/register', controller.registerAccount)
-*/
+
 
  // catch 404: alltid som sista route!
  router.use('*', (req, res, next) => next(createError(404)))
