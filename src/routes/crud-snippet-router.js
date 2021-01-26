@@ -21,6 +21,7 @@ router.get('/snippets/new', controller.newSnippet)
 
 // Login:
 router.get('/login', controller.loginPage)
+router.post('/login', controller.postLogin)
 
 
 
