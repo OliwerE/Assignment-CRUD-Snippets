@@ -48,4 +48,22 @@ export class CrudSnippetController {
 
         res.redirect('/login')
     }
+
+    logout (req, res, next) {
+      req.session.destroy(e => {
+        if (e !== undefined) {
+
+          // Flash message här!
+
+          return res.redirect('/') // FIXA statuskod om något blir fel!
+        }
+        res.clearCookie(process.env.SESSION_NAME) // tar bort inaktiverade cookien
+        
+        
+        // Flash message här!
+
+
+        return res.redirect('/')
+      })
+    }
 }

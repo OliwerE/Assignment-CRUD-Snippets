@@ -23,6 +23,8 @@ router.get('/snippets/new', controller.newSnippet)
 router.get('/login', controller.loginPage)
 router.post('/login', controller.postLogin)
 
+// Logout
+router.post('/logout', controller.logout)
 
 
  // catch 404: alltid som sista route!
