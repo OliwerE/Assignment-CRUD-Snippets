@@ -26,6 +26,10 @@ router.post('/login', controller.postLogin)
 // Logout
 router.post('/logout', controller.logout)
 
+// Register
+router.get('/register', controller.registerPage)
+router.post('/register', controller.registerAccount)
+
 
  // catch 404: alltid som sista route!
  router.use('*', (req, res, next) => next(createError(404)))

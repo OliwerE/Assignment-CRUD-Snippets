@@ -7,9 +7,9 @@
 
 // TA BORT! tillfälliga "konton"
 const users = [// ANVÄND DATABAS!
-    { id: 1, name: 'anv1', username: 'anv1', password: 'secret' },
-    { id: 2, name: 'anv2', username: 'anv2', password: 'dsdsdsd' },
-    { id: 3, name: 'anv3', username: 'anv3', password: 'adsaadadaddad' }
+    { id: 1, username: 'anv1', password: 'secret' },
+    { id: 2, username: 'anv2', password: 'dsdsdsd' },
+    { id: 3, username: 'anv3', password: 'adsaadadaddad' }
 ]
 
 export class CrudSnippetController {
@@ -65,5 +65,29 @@ export class CrudSnippetController {
 
         return res.redirect('/')
       })
+    }
+
+    registerPage (req, res, next) {
+      res.render('account/register')
+    }
+
+    registerAccount (req, res, next) {
+      const username = req.body.username
+      const password = req.body.password
+
+      console.log('Username: ', username)
+      console.log('Password: ', password)
+
+      if (username && password !== undefined) {
+        var uniqueUsernameCheck = users.find(thisUser => thisUser.username === username)
+      }
+
+      if (!uniqueUsernameCheck) { // Om användarnamnet inte existerar
+        console.log('Does not exist!')
+
+        return
+      }
+
+      console.log('Does EXIST!')
     }
 }
