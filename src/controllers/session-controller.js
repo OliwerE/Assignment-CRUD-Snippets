@@ -7,12 +7,14 @@
 
 import bcrypt from 'bcrypt'
 
+import { User } from '../models/user-model.js'
+
 // TA BORT! tillfälliga "konton"
-const users = [// ANVÄND DATABAS!
+/*const users = [// ANVÄND DATABAS!
   {username: 'oliwer', password: '$2b$08$Q.ffeqQzJxd35cLdyWX/ReOZuEV/8gdEwAibDIU4hYhzJi1tWnNOi'},
   {username: 'anv2', password: 'dsdsdsd' },
   {username: 'anv3', password: 'adsaadadaddad' }
-]
+]*/
 
 let createdPass
 
@@ -34,22 +36,24 @@ export class SessionController {
         console.log(await bcrypt.compare(password, createdPass))
         console.log('----bcrypt test----')*/
 
-          const thisUser = users.find(thisUser => thisUser.username === username)
-          console.log(thisUser)
-          if (thisUser !== undefined) {
-            var passwordCheck = await bcrypt.compare(password, thisUser.password)
+        //const query = {}
+
+          const thisUser = await User.find({username: username}) // User.find( =thisUser> thisUser.username === username) // hittar anv i databasen!
+          //console.log(thisUser[0].password) // skapa krash använd för att fixa int serv err!
+          if (thisUser.length === 1) {
+            var passwordCheck = await bcrypt.compare(password, thisUser[0].password)
+            console.log(passwordCheck)
+            if (passwordCheck === true) {
+              req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt? OBS FEL! Se längre ner skapa konto är userid!
+              req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
+              return res.redirect('/')
+            }
           }
-
-
+          
+          // hittade mer än en användare eller användare saknas.
+          req.session.flash = { type: 'flashError', message: 'Login Failed!' }
+          return res.redirect('/session/login')
       }
-      if (passwordCheck === true) {
-        req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt?
-        req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
-        return res.redirect('/')
-      }
-
-      req.session.flash = { type: 'flashError', message: 'Login Failed!' }
-      res.redirect('/session/login')
   }
 
   logout (req, res, next) {
@@ -76,25 +80,40 @@ export class SessionController {
     console.log('Username: ', username)
     console.log('Password: ', password)
 
+    
     if (username && password !== undefined) {
-      var uniqueUsernameCheck = users.find(thisUser => thisUser.username === username)
+      var nameCheck = await User.find({username: username})
+
+      var uniqueUsernameCheck
+      if (nameCheck.length === 0) {
+        uniqueUsernameCheck = true
+      } else {
+        uniqueUsernameCheck = false
+      }
     }
 
-    if (!uniqueUsernameCheck) { // Om användarnamnet inte existerar
+    if (uniqueUsernameCheck === true) { // Om användarnamnet inte existerar
       console.log('Does not exist!')
 
       //skapar ny anv:
-      const newUser = {
+      /*const newUser = {
         id: users.length + 1,
         username: username,
         password: await bcrypt.hash(password, 8)
-      }
+      }*/
 
-      users.push(newUser) // Byt till mongoDB här!!
+      const newUser = new User({
+        username: username,
+        password: await bcrypt.hash(password, 8)
+      })
 
-      req.session.userId = newUser.id
+      await newUser.save() // sparar i mongodb!
 
-      console.log(users)
+      //users.push(newUser) // Byt till mongoDB här!!
+
+      req.session.userId = req.session.id // OK göra såhär??
+
+      //console.log(users)
 
       req.session.flash = { type: 'flashSuccess', message: 'Your account has been created!' }
       return res.redirect('/') // startsidan
@@ -102,6 +121,7 @@ export class SessionController {
       req.session.flash = { type: 'flashError', message: 'Choose another username.' }
       return res.redirect('./register')
     }
+    
 
 
   }
