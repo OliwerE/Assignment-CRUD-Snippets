@@ -20,7 +20,8 @@ export class CrudSnippetController {
 
         if (req.session.userId !== undefined) {
             const viewData = {
-                auth: true
+                auth: true,
+                userName: req.session.userName
             }
             res.render('crud-snippets/index', { viewData })
         } else {
@@ -34,7 +35,8 @@ export class CrudSnippetController {
         //console.log(users)
         if (req.session.userId !== undefined) {
             const viewData = {
-                auth: true
+                auth: true,
+                userName: req.session.userName
             }
             res.render('crud-snippets/snippets', { viewData })
         } else {
@@ -45,7 +47,8 @@ export class CrudSnippetController {
     newSnippet (req, res, next) {
         if (req.session.userId !== undefined) {
             const viewData = {
-                auth: true
+                auth: true,
+                userName: req.session.userName
             }
             res.render('crud-snippets/new', { viewData })
         } else {

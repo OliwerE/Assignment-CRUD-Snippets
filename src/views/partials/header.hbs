@@ -1,25 +1,32 @@
 <header>
-        <div class="navBlocks" id="navName">
-            <h1>Crud Snippets</h1>
-        </div>
-        <div class="navBlocks" id="links">
-
+<div class="navBlocks" id="navName">
+    <h1>Crud Snippets</h1>
+</div>
+{{#if viewData.auth}}
+    <div class="navBlocks" id="links">
         <ul id="navList">
-            {{#if viewData.auth}}
-                <a href="/"><li class="navListItem">Home</li></a>
-                <a href="/crud/snippets"><li class="navListItem">Snippets</li></a>
-                <a href="/crud/snippets/new"><li class="navListItem">New Snippet</li></a>
-                <li>
-                    <form method="post" action="/session/logout">
-                        <button>Logout</button>
-                    </form> <!-- Fixa css! -->
-                </li>
-            {{else}}
-                <a href="/"><li class="navListItem">Home</li></a>
-                <a href="/crud/snippets"><li class="navListItem">Snippets</li></a>
-                <a href="/session/login"><li class="navListItem">Login</li></a>
-                <a href="/session/register"><li class="navListItem">Register</li></a>
-            {{/if}}
-            </ul>
-        </div>
+            <a href="/"><li class="navListItem">Home</li></a>
+            <a href="/crud/snippets"><li class="navListItem">Snippets</li></a>
+            <a href="/crud/snippets/new"><li class="navListItem">New Snippet</li></a>
+        </ul>
+    </div>
+    <div class="navBlocks">
+        <form id="logoutForm" method="post" action="/session/logout">
+            <button>Sign Out</button>
+        </form> <!-- Fixa css! -->
+    </div>
+    <div class="navBlocks">
+        <h1>{{viewData.userName}}</h1>
+    </div>
+
+{{else}}
+    <div class="navBlocks" id="links">
+        <ul id="navList">
+        <a href="/"><li class="navListItem">Home</li></a>
+        <a href="/crud/snippets"><li class="navListItem">Snippets</li></a>
+        <a href="/session/login"><li class="navListItem">Login</li></a>
+        <a href="/session/register"><li class="navListItem">Register</li></a>
+        </ul>
+    </div>
+{{/if}}
 </header>

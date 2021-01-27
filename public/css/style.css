@@ -24,7 +24,25 @@ header {
 #navList {
     list-style: none;
     height: 75px;
+    width: 550px;
     margin-top: 0px;
+}
+
+#logoutForm {
+    display: flex;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#logoutForm button {
+    align-self: center;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-weight: bold;
+    font-size: 20px;
+    background-color: #c5c5c5;
+    border-radius: 10px;
+    height: 35px;
 }
 
 .navListItem {
