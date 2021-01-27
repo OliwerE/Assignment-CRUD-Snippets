@@ -34,9 +34,11 @@ export class SessionController {
 
       if (thisUser !== undefined) {
         req.session.userId = thisUser.id
+        req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
         return res.redirect('/')
       }
 
+      req.session.flash = { type: 'flashError', message: 'Login Failed!' }
       res.redirect('/session/login')
   }
 
@@ -44,18 +46,13 @@ export class SessionController {
     req.session.destroy(e => {
       if (e !== undefined) {
 
-        // Flash message här!
+        req.session.flash = { type: 'flashError', message: 'Could not log out. Please try again!' }
 
         return res.redirect('/') // FIXA statuskod om något blir fel!
       }
-      res.clearCookie(process.env.SESSION_NAME) // tar bort inaktiverade cookien
-      
-      
-      // Flash message här!
-
-
-      return res.redirect('/')
     })
+      //req.session.flash = { type: 'flashSuccess', message: 'You are logged out!' }
+      res.redirect('/') // redirect här? isf går inte viewdata att skicka!
   }
 
   registerPage (req, res, next) {
@@ -89,9 +86,13 @@ export class SessionController {
 
       console.log(users)
 
+      req.session.flash = { type: 'flashSuccess', message: 'Your account has been created!' }
       return res.redirect('/') // startsidan
+    } else {
+      req.session.flash = { type: 'flashError', message: 'Choose another username.' }
+      return res.redirect('./register')
     }
 
-    console.log('Does EXIST!')
+
   }
 }

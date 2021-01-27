@@ -53,6 +53,24 @@ header {
     margin-left: 10px;
 }
 
+.flashMSG {
+    width: 600px;
+    height: 30px;
+    border-radius: 40px;
+    margin: 10px auto 0;
+    text-align: center;
+    padding-top: 15px
+}
+
+#flashError {
+    background-color: rgb(250, 76, 76);
+}
+
+#flashSuccess {
+    background-color: rgb(147, 228, 147);
+}
+
+
 body main {
     background-color: #ffffff;
     min-height: calc(100vh - 125px);
