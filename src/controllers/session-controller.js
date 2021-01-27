@@ -9,9 +9,9 @@ import bcrypt from 'bcrypt'
 
 // TA BORT! tillfälliga "konton"
 const users = [// ANVÄND DATABAS!
-  { id: 1, username: 'anv1', password: 'secret' },
-  { id: 2, username: 'anv2', password: 'dsdsdsd' },
-  { id: 3, username: 'anv3', password: 'adsaadadaddad' }
+  {username: 'anv1', password: 'secret' },
+  {username: 'anv2', password: 'dsdsdsd' },
+  {username: 'anv3', password: 'adsaadadaddad' }
 ]
 
 export class SessionController {
@@ -33,7 +33,7 @@ export class SessionController {
       }
 
       if (thisUser !== undefined) {
-        req.session.userId = thisUser.id
+        req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt?
         req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
         return res.redirect('/')
       }
