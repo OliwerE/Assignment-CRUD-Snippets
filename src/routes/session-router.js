@@ -20,21 +20,35 @@ const activeSessionCheck = (req, res, next) => {
     }
 }
 
+const inactiveSessionCheck = (req, res, next) => { // om användare är inloggad öppnas inte sidan
+    if (req.session.userId) {
+
+        // err kod här!!
+
+        const viewData = {
+            auth: true
+        }
+        res.render('errors/error', { viewData })
+    } else {
+        next()
+    }
+}
+
 
 
 
 const controller = new SessionController()
 
 // Login:
-router.get('/login', controller.loginPage)
-router.post('/login', controller.postLogin)
+router.get('/login', inactiveSessionCheck, controller.loginPage)
+router.post('/login',inactiveSessionCheck, controller.postLogin)
 
 // Logout
-router.post('/logout', controller.logout)
+router.post('/logout', activeSessionCheck, controller.logout)
 
 // Register
-router.get('/register', controller.registerPage)
-router.post('/register', controller.registerAccount)
+router.get('/register', inactiveSessionCheck, controller.registerPage)
+router.post('/register',inactiveSessionCheck, controller.registerAccount)
 
 
  // catch 404: alltid som sista route!

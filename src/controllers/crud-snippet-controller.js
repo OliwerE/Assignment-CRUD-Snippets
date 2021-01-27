@@ -17,17 +17,40 @@ import bcrypt from 'bcrypt'
 export class CrudSnippetController {
     index (req, res, next) {
         //console.log(req.headers.cookie)
-        res.render('crud-snippets/index')
-        console.log(req.session.id)
+
+        if (req.session.userId !== undefined) {
+            const viewData = {
+                auth: true
+            }
+            res.render('crud-snippets/index', { viewData })
+        } else {
+            res.render('crud-snippets/index')
+        }
+
+        //console.log(req.session.id)
     }
 
     showSnippetsList (req, res, next) {
         //console.log(users)
-        res.render('crud-snippets/snippets')        
+        if (req.session.userId !== undefined) {
+            const viewData = {
+                auth: true
+            }
+            res.render('crud-snippets/snippets', { viewData })
+        } else {
+            res.render('crud-snippets/snippets')
+        }     
     }
 
     newSnippet (req, res, next) {
-        res.render('crud-snippets/new')        
+        if (req.session.userId !== undefined) {
+            const viewData = {
+                auth: true
+            }
+            res.render('crud-snippets/new', { viewData })
+        } else {
+            res.render('crud-snippets/new')
+        }          
     }
 
 }
