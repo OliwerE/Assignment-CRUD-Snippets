@@ -22,7 +22,7 @@ export class CrudSnippetController {
     }
 
     showSnippetsList (req, res, next) {
-        console.log(users)
+        //console.log(users)
         res.render('crud-snippets/snippets')        
     }
 

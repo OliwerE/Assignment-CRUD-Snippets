@@ -9,10 +9,12 @@ import bcrypt from 'bcrypt'
 
 // TA BORT! tillfälliga "konton"
 const users = [// ANVÄND DATABAS!
-  {username: 'anv1', password: 'secret' },
+  {username: 'oliwer', password: '$2b$08$Q.ffeqQzJxd35cLdyWX/ReOZuEV/8gdEwAibDIU4hYhzJi1tWnNOi'},
   {username: 'anv2', password: 'dsdsdsd' },
   {username: 'anv3', password: 'adsaadadaddad' }
 ]
+
+let createdPass
 
 export class SessionController {
   loginPage (req, res, next) {
@@ -28,11 +30,19 @@ export class SessionController {
 
 
       if (username && password !== undefined) {
-          var thisUser = users.find(thisUser => thisUser.username === username && thisUser.password === password)
-          console.log(thisUser)
-      }
+        /*console.log('----bcrypt test----')
+        console.log(await bcrypt.compare(password, createdPass))
+        console.log('----bcrypt test----')*/
 
-      if (thisUser !== undefined) {
+          const thisUser = users.find(thisUser => thisUser.username === username)
+          console.log(thisUser)
+          if (thisUser !== undefined) {
+            var passwordCheck = await bcrypt.compare(password, thisUser.password)
+          }
+
+
+      }
+      if (passwordCheck === true) {
         req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt?
         req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
         return res.redirect('/')
@@ -77,7 +87,7 @@ export class SessionController {
       const newUser = {
         id: users.length + 1,
         username: username,
-        password: password
+        password: await bcrypt.hash(password, 8)
       }
 
       users.push(newUser) // Byt till mongoDB här!!
