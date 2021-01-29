@@ -7,6 +7,8 @@
 
 import bcrypt from 'bcrypt'
 
+import { Snippet } from '../models/snippet-model.js'
+
 // TA BORT! tillfälliga "konton"
 /*const users = [// ANVÄND DATABAS!
     { id: 1, username: 'anv1', password: 'secret' },
@@ -56,8 +58,25 @@ export class CrudSnippetController {
         }          
     }
 
-    newSnippetPost (req, res, next) {
-        console.log('POST!')
+    async newSnippetPost (req, res, next) {
+    const snippetName = req.body.name
+    const snippetData = req.body.snippet
+    console.log('POST!')
+
+    try {
+      const newSnippet = new Snippet({
+        name: snippetName,
+        snippet: snippetData
+      })
+
+      await newSnippet.save() // Sparar snippet i mongo
+
+      req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
+      return res.redirect('/crud/snippets') // startsidan
+    } catch (err) {
+      console.log(err) // fixa för anv sen!
+    }
+
     }
 
 }

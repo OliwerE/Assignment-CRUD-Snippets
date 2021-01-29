@@ -6,9 +6,9 @@
     <form id="snippetForm" method="post" action="/crud/snippets/new">
         <!-- validation summary hbs här! -->
         <div class="form-group">
-            Name: <input type="text" name="value" value="{{value}}" placeholder="Enter snippet name" required="required"/>
+            Name: <input type="text" name="name" value="{{value}}" placeholder="Enter snippet name" required="required"/>
         </div>
-        <textarea rows="4" cols="50" name="comment" form="snippetForm" required="required"></textarea>
+        <textarea rows="4" cols="50" name="snippet" form="snippetForm" required="required"></textarea>
         <br>
         <button type="submit">Create Snippet</button>
     </form>
