@@ -1,0 +1,19 @@
+<!-- Displays a snippet -->
+{{#if viewData.snippet}}
+  <div id="showSnippetContainer">
+    <div id="removeDeleteUpdate">
+      <!-- Ska bara visas om ägaren! -->
+        <ul id="snippetOwnerNav">
+          <a href="/crud/snippets/{{viewData.snippet.id}}/edit"><li class="snippetOwnerNavItem">Edit</li></a>
+          <a href="/crud/snippets/{{viewData.snippet.id}}/remove"><li class="snippetOwnerNavItem">Remove</li></a>
+        </ul>
+    </div>
+    <h1>{{viewData.snippet.name}}</h1>
+    <div id="showSnippetCodeContainer">
+      <pre><code>{{viewData.snippet.snippet}}</code></pre>
+    </div>
+    <div id="dateData">
+      <p>Created: {{viewData.snippet.createdAt}} | Last modified: {{viewData.snippet.updatedAt}}</p>
+    </div>
+  </div>
+{{/if}}

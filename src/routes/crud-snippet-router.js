@@ -31,7 +31,9 @@ router.get('/', controller.index)
 router.get('/snippets', controller.showSnippetsList)
 
 router.get('/snippets/new', activeSessionCheck, controller.newSnippetGet) // fungerar endast om inloggad!
-router.post('/snippets/new', activeSessionCheck, controller.newSnippetPost)
+router.post('/snippets/create', activeSessionCheck, controller.newSnippetPost)
+
+router.get('/snippets/:id', controller.snippet)
 
 /*
 // Login:

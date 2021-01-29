@@ -53,6 +53,34 @@ export class CrudSnippetController {
         res.render('crud-snippets/snippets', { viewData }) 
     }
 
+    async snippet (req, res, next) {
+      const reqSnippet = req.params.id
+
+      var viewData = {}
+      if (req.session.userId !== undefined) {
+        viewData.auth = true
+        viewData.userName = req.session.userName
+      }
+
+      const foundSnippet = (await Snippet.find({_id: reqSnippet})).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name,
+        snippet: Snippet.snippet,
+        createdAt: moment(Snippet.createdAt).fromNow(),
+        updatedAt: moment(Snippet.updatedAt).fromNow()
+      }))
+
+      viewData.snippet = foundSnippet[0]
+
+      console.log(viewData.snippet)
+
+      res.render('crud-Snippets/snippet', { viewData })
+
+
+      // lägg till 404
+
+    }
+
     newSnippetGet (req, res, next) {
         if (req.session.userId !== undefined) {
             const viewData = {
