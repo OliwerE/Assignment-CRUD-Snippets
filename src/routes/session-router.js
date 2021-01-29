@@ -14,7 +14,9 @@ export const router = express.Router()
 
 const activeSessionCheck = (req, res, next) => {
     if (!req.session.userId) {
-        res.redirect('/') // om anv inte är inloggad öppnas inte nästa sida, ist redirect till start.
+        res.status(404)
+        res.render('errors/404') // obs måste ha denna status och render! krav för #15
+        //res.redirect('/') // om anv inte är inloggad öppnas inte nästa sida, ist redirect till start.
     } else {
         next()
     }

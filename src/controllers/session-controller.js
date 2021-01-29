@@ -52,12 +52,13 @@ export class SessionController {
           }
           
           // hittade mer än en användare eller användare saknas.
-          req.session.flash = { type: 'flashError', message: 'Login Failed!' }
+          req.session.flash = { type: 'flashError', message: 'Login Failed! (401)' }
           return res.redirect('/session/login')
       }
   }
 
   logout (req, res, next) {
+    console.log('här!')
     req.session.destroy(e => {
       if (e !== undefined) {
 
