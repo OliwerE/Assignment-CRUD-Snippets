@@ -5,16 +5,18 @@
 <table id="snippetTable">
     <thead>
         <tr>
-            <th>created</th>
             <th>Name</th>
+            <th>Created</th>
+            <th>Last modified</th>
         </tr>
     </thead>
     <tbody>        
-        {{#if viewData.snippets.length}} <-- om det finns snippets -->
+        {{#if viewData.snippets.length}}
         {{#each viewData.snippets}}
         <tr>
-            <th>{{this.createdAt}}</th>
-            <td>{{this.value}}</td>
+            <th><a href="/crud/snippets/{{this.id}}">{{this.name}}</a></th>
+            <td>{{this.createdAt}}</td>
+            <td>{{this.modifiedAt}}</td>
         </tr>
         {{/each}}
         {{else}}

@@ -8,6 +8,7 @@
 import bcrypt from 'bcrypt'
 
 import { Snippet } from '../models/snippet-model.js'
+import moment from 'moment'
 
 // TA BORT! tillfälliga "konton"
 /*const users = [// ANVÄND DATABAS!
@@ -33,17 +34,23 @@ export class CrudSnippetController {
         //console.log(req.session.id)
     }
 
-    showSnippetsList (req, res, next) {
+    async showSnippetsList (req, res, next) {
         //console.log(users)
+        var viewData = {}
         if (req.session.userId !== undefined) {
-            const viewData = {
-                auth: true,
-                userName: req.session.userName
-            }
-            res.render('crud-snippets/snippets', { viewData })
-        } else {
-            res.render('crud-snippets/snippets')
-        }     
+          viewData.auth = true
+          viewData.userName = req.session.userName
+        }
+
+        viewData.snippets = (await Snippet.find({})).map(Snippet => ({
+          id: Snippet._id,
+          name: Snippet.name,
+          createdAt: moment(Snippet.createdAt).fromNow(),
+          modifiedAt: moment(Snippet.updatedAt).fromNow()
+        }))
+        console.log(viewData)
+
+        res.render('crud-snippets/snippets', { viewData }) 
     }
 
     newSnippetGet (req, res, next) {
