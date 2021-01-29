@@ -7,7 +7,10 @@
 
  import mongoose from 'mongoose'
 
- export const connectDB = () => {
+ import session from 'express-session'
+ import MongoStore from 'connect-mongo'
+
+ export const connectDB = (application) => {
      mongoose.connection.on('connected', () => {
          console.log('Mongoose is connected.')
      })
@@ -27,9 +30,31 @@
     })
 
     // anslutning till databasen
-    return mongoose.connect(process.env.DB_CONNECTION_STRING, {
+    mongoose.connect(process.env.DB_CONNECTION_STRING, {
       useCreateIndex: true,
       useNewUrlParser: true,
       useUnifiedTopology: true
     })
+
+    var mongoDBSessionStore = MongoStore(session)
+
+    const sessionOptions = {
+    name: process.env.SESSION_NAME,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24, // en dag
+      sameSite: 'lax'
+    },
+    store: new mongoDBSessionStore({ mongooseConnection: mongoose.connection })
+  }
+
+  if (application.get('env') === 'production') { // om i produktions server!
+    application.set('trust proxy', 1) // lita på första proxyn
+    sessionOptions.cookie.secure = true // kräv säkra kakor!
+  }
+
+  application.use(session(sessionOptions))
  }

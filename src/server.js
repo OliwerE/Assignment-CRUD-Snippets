@@ -16,9 +16,10 @@ import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
 
 const startApplication = async () => {
-  await connectDB() // ansluter till databasen
+
 
   const application = express()
+  await connectDB(application) // ansluter till databasen
   const fullDirName = dirname(fileURLToPath(import.meta.url))
 
   application.use(helmet()) // extra säkerthet med http headers för bl.a xss!
@@ -40,7 +41,9 @@ const startApplication = async () => {
 
   // Session:
 
-  const sessionOptions = {
+  // FLYTTAD TILL MONGOOSE.js
+
+  /*const sessionOptions = {
     name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -57,7 +60,7 @@ const startApplication = async () => {
     sessionOptions.cookie.secure = true // kräv säkra kakor!
   }
 
-  application.use(session(sessionOptions))
+  application.use(session(sessionOptions))*/
 
   // tar bort flash messages efter en gång
   application.use((req, res, next) => {

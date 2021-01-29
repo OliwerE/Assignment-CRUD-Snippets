@@ -57,16 +57,16 @@ export class SessionController {
       }
   }
 
-  logout (req, res, next) {
+  async logout (req, res, next) {
     console.log('här!')
-    req.session.destroy(e => {
+     await req.session.destroy(/*e => { // Något fel här.. behövs inte?
       if (e !== undefined) {
-
+        console.log(e)
         req.session.flash = { type: 'flashError', message: 'Could not log out. Please try again!' }
 
         return res.redirect('/') // FIXA statuskod om något blir fel!
       }
-    })
+    }*/)
       //req.session.flash = { type: 'flashSuccess', message: 'You are logged out!' }
       res.redirect('/') // redirect här? isf går inte viewdata att skicka!
   }
