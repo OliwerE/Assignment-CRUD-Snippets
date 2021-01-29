@@ -3,7 +3,7 @@
 </h1>
 
 <div id="snippetFormContainer">
-    <form id="snippetForm" method="post" action="/crud/{{viewData.snippet.id}}/update">
+    <form id="snippetForm" method="post" action="/crud/snippets/{{viewData.snippet.id}}/update">
         <!-- validation summary hbs här! -->
         <div class="form-group">
             Name: <input type="text" name="name" value="{{viewData.snippet.name}}" placeholder="Enter snippet name" required="required"/>

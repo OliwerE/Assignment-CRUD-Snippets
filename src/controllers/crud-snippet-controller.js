@@ -121,6 +121,53 @@ export class CrudSnippetController {
       
     }
 
+    async snippetUpdate (req, res, next) {
+      const snippetID = req.params.id
+      const sessionUserName = req.session.userName
+      
+      console.log(snippetID)
+      
+      // OBS upprepning från edit!!
+      const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name,
+        snippet: Snippet.snippet,
+        owner: Snippet.owner,
+        createdAt: moment(Snippet.createdAt).fromNow(),
+        updatedAt: moment(Snippet.updatedAt).fromNow()
+      }))
+
+      console.log(foundSnippet)
+
+      if (foundSnippet.length === 0) {
+        console.log('hittade ej snippet!')
+        return
+      }
+
+      if (foundSnippet.length === 1) {
+        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
+          const snippetName = req.body.name
+          const snippetData = req.body.snippet
+
+          console.log(snippetName, snippetData)
+
+          
+          Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
+            if (err) {
+              console.log('snippet update:  ', err)
+            }
+            if (res) {
+              console.log('snippet update:  ', res)
+            }
+          })
+        }
+        console.log('inte ägare')
+      } else {
+        console.log('fel mer än en snippet!')
+      }
+
+    }
+
     newSnippetGet (req, res, next) {
         if (req.session.userId !== undefined) {
             const viewData = {
