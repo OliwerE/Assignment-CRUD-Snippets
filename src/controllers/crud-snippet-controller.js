@@ -81,6 +81,46 @@ export class CrudSnippetController {
 
     }
 
+    async snippetEdit (req, res, next) {
+      const snippetID = req.params.id
+      const sessionUserName = req.session.userName
+
+      const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name,
+        snippet: Snippet.snippet,
+        owner: Snippet.owner,
+        createdAt: moment(Snippet.createdAt).fromNow(),
+        updatedAt: moment(Snippet.updatedAt).fromNow()
+      }))
+
+      if (foundSnippet.length === 1) {
+        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
+
+          
+
+          console.log('Snippet ägare bekräftad!')
+          const viewData = {
+            auth: true,
+            userName: req.session.userName,
+            snippet: foundSnippet[0]
+          }
+
+          console.log(viewData)
+
+          res.render('crud-snippets/update', { viewData })
+          // starta edit här!
+          return
+        }
+        console.log('owner error')
+        return
+      }
+      
+      console.log('slut error')
+      // ERROR 500 HÄR!
+      
+    }
+
     newSnippetGet (req, res, next) {
         if (req.session.userId !== undefined) {
             const viewData = {
@@ -101,7 +141,8 @@ export class CrudSnippetController {
     try {
       const newSnippet = new Snippet({
         name: snippetName,
-        snippet: snippetData
+        snippet: snippetData,
+        owner: req.session.userName
       })
 
       await newSnippet.save() // Sparar snippet i mongo

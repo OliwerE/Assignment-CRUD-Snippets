@@ -35,18 +35,10 @@ router.post('/snippets/create', activeSessionCheck, controller.newSnippetPost)
 
 router.get('/snippets/:id', controller.snippet)
 
-/*
-// Login:
-router.get('/login', controller.loginPage)
-router.post('/login', controller.postLogin)
+router.get('/snippets/:id/edit', controller.snippetEdit) // lägg till session check
 
-// Logout
-router.post('/logout', controller.logout)
+//router.get('/snippets/:id/remove', controller.snippetRemove) // lägg till session check
 
-// Register
-router.get('/register', controller.registerPage)
-router.post('/register', controller.registerAccount)
-*/
 
  // catch 404: alltid som sista route!
  router.use('*', (req, res, next) => next(createError(404)))

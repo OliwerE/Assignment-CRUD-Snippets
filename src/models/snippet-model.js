@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     snippet: {
       type: String,
       required: true
+    },
+    owner: {
+      type: String,
+      required: true
     }
   },
   {
