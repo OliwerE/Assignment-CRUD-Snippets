@@ -124,7 +124,7 @@ footer p {
 
 #showSnippetContainer {
     background-color: green;
-    min-height: 600px;
+    min-height: 500px;
     width: 600px;
     margin: 0 auto;
 }
@@ -135,6 +135,8 @@ footer p {
 
 #showSnippetCodeContainer {
     background-color: yellow;
+    overflow-x: auto;
+    min-height: 600px;
 }
 
 #dateData {
