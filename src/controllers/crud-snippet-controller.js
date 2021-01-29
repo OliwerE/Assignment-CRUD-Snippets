@@ -44,7 +44,7 @@ export class CrudSnippetController {
         }     
     }
 
-    newSnippet (req, res, next) {
+    newSnippetGet (req, res, next) {
         if (req.session.userId !== undefined) {
             const viewData = {
                 auth: true,
@@ -54,6 +54,10 @@ export class CrudSnippetController {
         } else {
             res.render('crud-snippets/new')
         }          
+    }
+
+    newSnippetPost (req, res, next) {
+        console.log('POST!')
     }
 
 }

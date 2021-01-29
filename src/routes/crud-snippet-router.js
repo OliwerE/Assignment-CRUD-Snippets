@@ -14,7 +14,8 @@ export const router = express.Router()
 
 const activeSessionCheck = (req, res, next) => {
     if (!req.session.userId) {
-        res.redirect('/') // om anv inte är inloggad öppnas inte nästa sida, ist redirect till start.
+        res.status(404)
+        res.render('errors/404') // obs måste ha denna status och render! krav för #10
     } else {
         next()
     }
@@ -29,7 +30,8 @@ router.get('/', controller.index)
 
 router.get('/snippets', controller.showSnippetsList)
 
-router.get('/snippets/new', activeSessionCheck, controller.newSnippet) // fungerar endast om inloggad!
+router.get('/snippets/new', activeSessionCheck, controller.newSnippetGet) // fungerar endast om inloggad!
+router.post('/snippets/new', activeSessionCheck, controller.newSnippetPost)
 
 /*
 // Login:
