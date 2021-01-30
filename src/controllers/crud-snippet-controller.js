@@ -27,6 +27,32 @@ export class CrudSnippetController {
           next()
       }
   }
+
+  async snippetAuthorizeChanges (req, res, next) {
+    const snippetID = req.params.id
+      const sessionUserName = req.session.userName
+
+      const foundSnippet = await Snippet.find({_id: snippetID})
+
+      if (foundSnippet.length === 1) { // obs 404 för ej inloggade hanteras av sessionAuthorize som anropas innan denna metod!
+        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
+          return next()
+        } if ((foundSnippet[0].owner !== sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
+          const error = new Error('Forbidden')
+          error.status = 403
+          return next(error)
+        } else {
+          const error = new Error('Internal Server Error')
+          error.status = 500
+          return next(error)
+        }
+      } else {
+        const error = new Error('Internal Server Error')
+        error.status = 500
+        return next(error)
+      }
+  }
+
     index (req, res, next) {
         //console.log(req.headers.cookie)
 
@@ -132,186 +158,80 @@ export class CrudSnippetController {
 
     async snippetEdit (req, res, next) {
       const snippetID = req.params.id
-      const sessionUserName = req.session.userName
 
       const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
         id: Snippet._id,
         name: Snippet.name,
         snippet: Snippet.snippet,
-        owner: Snippet.owner,
-        createdAt: moment(Snippet.createdAt).fromNow(),
-        updatedAt: moment(Snippet.updatedAt).fromNow()
+        //owner: Snippet.owner,
+        //createdAt: moment(Snippet.createdAt).fromNow(),
+        //updatedAt: moment(Snippet.updatedAt).fromNow()
       }))
 
-      if (foundSnippet.length === 1) {
-        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
-
-          
-
-          console.log('Snippet ägare bekräftad!')
-          const viewData = {
-            auth: true,
-            userName: req.session.userName,
-            snippet: foundSnippet[0]
-          }
-
-          console.log(viewData)
-
-          res.render('crud-snippets/update', { viewData })
-          // starta edit här!
-          return
-        }
-        console.log('owner error (snippet edit get)')
-        res.status(403)
-        res.render('errors/403')
-        return
+      const viewData = {
+        auth: true,
+        userName: req.session.userName,
+        snippet: foundSnippet[0]
       }
-      
-      console.log('slut error') // ska ge error 500
-      // ERROR 500 HÄR!
-      
+      console.log(viewData.snippet)
+
+      return res.render('crud-snippets/edit', { viewData })
     }
 
     async snippetUpdate (req, res, next) {
       const snippetID = req.params.id
-      const sessionUserName = req.session.userName
-      
-      console.log(snippetID)
-      
-      // OBS upprepning från edit!!
-      const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
-        id: Snippet._id,
-        name: Snippet.name,
-        snippet: Snippet.snippet,
-        owner: Snippet.owner,
-        createdAt: moment(Snippet.createdAt).fromNow(),
-        updatedAt: moment(Snippet.updatedAt).fromNow()
-      }))
+      const snippetName = req.body.name
+      const snippetData = req.body.snippet
 
-      console.log(foundSnippet)
+      console.log(snippetName, snippetData)
 
-      if (foundSnippet.length === 0) {
-        console.log('hittade ej snippet!')
-        return
-      }
+      return Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
+        if (err) {
+          console.log('snippet update:  ', err)
 
-      if (foundSnippet.length === 1) {
-        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
-          const snippetName = req.body.name
-          const snippetData = req.body.snippet
-
-          console.log(snippetName, snippetData)
-
-          
-          Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
-            if (err) {
-              console.log('snippet update:  ', err)
-            }
-            if (res) {
-              console.log('snippet update:  ', res)
-            }
-          })
-          return
+          // flash msg här!
         }
-        console.log('owner error (snippet update post)')
-        res.status(403)
-        res.render('errors/403')
-        return
-      } else {
-        console.log('fel mer än en snippet!')
-      }
+        if (res) {
+          console.log('snippet update:  ', res)
 
+          // Flash msg och redirect till snippet här!
+        }
+      })
     }
 
     async snippetRemove (req, res, next) { // OBS mkt upprep från snippetEdit
-      const snippetID = req.params.id
-      const sessionUserName = req.session.userName
-
-      const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
-        id: Snippet._id,
-        name: Snippet.name,
-        snippet: Snippet.snippet,
-        owner: Snippet.owner,
-        createdAt: moment(Snippet.createdAt).fromNow(),
-        updatedAt: moment(Snippet.updatedAt).fromNow()
-      }))
-
-      if (foundSnippet.length === 1) {
-        if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
-
-          
-          console.log('äger snippet!')
-          const viewData = {
-            auth: true,
-            userName: req.session.userName,
-            snippetName: foundSnippet[0].name,
-            snippetID: foundSnippet[0].id
-          }
-
-          //console.log(viewData)
-
-          res.render('crud-snippets/remove', { viewData })
-          // starta edit här!
-          return
-        }
-        console.log('owner error (snippet remove get)')
-        res.status(403)
-        res.render('errors/403')
-        return
-      }
-      
-      console.log('slut error')
-      // ERROR 500 HÄR!
-      
-    }
-
-  async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
     const snippetID = req.params.id
     const sessionUserName = req.session.userName
 
     const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
       id: Snippet._id,
       name: Snippet.name,
-      snippet: Snippet.snippet,
-      owner: Snippet.owner,
-      createdAt: moment(Snippet.createdAt).fromNow(),
-      updatedAt: moment(Snippet.updatedAt).fromNow()
     }))
 
-    if (foundSnippet.length === 1) {
-      if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
-
-        if (req.body.confirmBox === 'on') { // om confirm är vald
-          console.log('gör task!')
-          console.log(snippetID)
-
-          try { // kanske try över hela metoden??
-            await Snippet.deleteOne({ _id: snippetID })
-            req.session.flash = { type: 'flashSuccess', message: 'The snippet was removed successfully.' }
-            res.redirect('/crud/snippets')
-          } catch (err) {
-            req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
-            res.redirect('./remove')
-
-          }
-
-
-        }
-
-        // starta edit här!
-        return
-      }
-      console.log('owner error (snippet delete post)')
-      res.status(403)
-      res.render('errors/403')
-      return
+    const viewData = {
+      auth: true,
+      userName: sessionUserName,
+      snippetName: foundSnippet[0].name,
+      snippetID: foundSnippet[0].id
     }
-    
-    console.log('slut error')
-    // ERROR 500 HÄR!
-    
+
+    //console.log(viewData)
+
+    res.render('crud-snippets/remove', { viewData })
+}
+
+  async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
+    const snippetID = req.params.id
+    if (req.body.confirmBox === 'on') { // om confirm är vald
+      //try { // kanske try över hela metoden??
+        await Snippet.deleteOne({ _id: snippetID })
+        req.session.flash = { type: 'flashSuccess', message: 'The snippet was removed successfully.' }
+        res.redirect('/crud/snippets')
+      /*} catch (err) {
+        req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
+        res.redirect('./remove')
+
+      }*/
+    }
   }
-
-
-
 }

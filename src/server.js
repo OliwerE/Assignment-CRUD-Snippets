@@ -76,6 +76,10 @@ const startApplication = async () => {
 
   // Felhantering
   application.use((err, req, res, next) => {
+    if (err.status === 403) {
+      return res.status(403).sendFile(join(fullDirName, 'views', 'errors', '403.html'))
+    }
+
     if (err.status === 404) {
       return res.status(404).sendFile(join(fullDirName, 'views', 'errors', '404.html'))
     }
@@ -83,6 +87,8 @@ const startApplication = async () => {
     if (err.status === 500) {
       return res.status(500).sendFile(join(fullDirName, 'views', 'errors', '500.html'))
     }
+
+
 
     // dev only: ta bort sen!
     //res.status(err.status || 500).render('errors/error', { error: err })

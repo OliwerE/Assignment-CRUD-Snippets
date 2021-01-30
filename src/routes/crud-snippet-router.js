@@ -22,12 +22,12 @@ router.post('/snippets/create', controller.sessionAuthorize, controller.newSnipp
 
 router.get('/snippets/:id', controller.snippet)
 
-router.get('/snippets/:id/edit', controller.sessionAuthorize, controller.snippetEdit) // OBS! kontrollerar ej om det är ägaren! endast första kontroll
-router.post('/snippets/:id/update', controller.sessionAuthorize, controller.snippetUpdate) // OBS! kontrollerar ej om det är ägaren! endast första kontroll
+router.get('/snippets/:id/edit', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetEdit)
+router.post('/snippets/:id/update', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetUpdate)
 
 
-router.get('/snippets/:id/remove', controller.sessionAuthorize, controller.snippetRemove) // OBS! kontrollerar ej om det är ägaren! endast första kontroll
-router.post('/snippets/:id/delete', controller.sessionAuthorize, controller.snippetDelete) // OBS! kontrollerar ej om det är ägaren! endast första kontroll
+router.get('/snippets/:id/remove', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetRemove)
+router.post('/snippets/:id/delete', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetDelete)
 
 
  // catch 404: alltid som sista route!
