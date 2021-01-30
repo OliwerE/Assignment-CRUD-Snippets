@@ -187,16 +187,19 @@ export class CrudSnippetController {
 
       console.log(snippetName, snippetData)
 
+      const _res = res
+      const _req = req
       return Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
         if (err) {
-          console.log('snippet update:  ', err)
-
-          // flash msg här!
+          const error = new Error('Internal Server Error')
+          error.status = 500
+          return next(error)
         }
         if (res) {
-          console.log('snippet update:  ', res)
-
+          console.log('snippet update2:  ', res)
           // Flash msg och redirect till snippet här!
+          _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been updated successfully.' }
+          _res.redirect('./')
         }
       })
     }
@@ -227,7 +230,7 @@ export class CrudSnippetController {
     if (req.body.confirmBox === 'on') { // om confirm är vald
       //try { // kanske try över hela metoden??
         await Snippet.deleteOne({ _id: snippetID })
-        req.session.flash = { type: 'flashSuccess', message: 'The snippet was removed successfully.' }
+        req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
         res.redirect('/crud/snippets')
       /*} catch (err) {
         req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
