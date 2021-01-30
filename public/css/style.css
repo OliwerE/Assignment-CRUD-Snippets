@@ -183,6 +183,7 @@ footer p {
     height: 600px;
     margin: 0 auto;
     background-color: green;
+    text-align: center;
 }
 
 #snippetForm textarea {
