@@ -181,7 +181,7 @@ export class CrudSnippetController {
     }
 
     async snippetUpdate (req, res, next) {
-      const snippetID = req.params.id
+        const snippetID = req.params.id
       const snippetName = req.body.name
       const snippetData = req.body.snippet
 
@@ -196,10 +196,17 @@ export class CrudSnippetController {
           return next(error)
         }
         if (res) {
-          console.log('snippet update2:  ', res)
-          // Flash msg och redirect till snippet här!
-          _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been updated successfully.' }
-          _res.redirect('./')
+          if (res.n === 0) {
+            _req.session.flash = { type: 'flashError', message: 'Internal Server Error. (500)' }
+            _res.redirect('./edit')
+          } else if (res.n === 1) {
+            _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been updated successfully.' }
+            _res.redirect('./')
+          } else {
+            const error = new Error('Internal Server Error')
+            error.status = 500
+            return next(error)
+          }
         }
       })
     }
