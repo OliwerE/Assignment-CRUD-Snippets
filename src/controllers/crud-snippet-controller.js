@@ -77,13 +77,15 @@ export class CrudSnippetController {
           viewData.userName = req.session.userName
         }
 
-        viewData.snippets = (await Snippet.find({})).map(Snippet => ({
+        const snippetsInStorage = (await Snippet.find({})).map(Snippet => ({
           id: Snippet._id,
           name: Snippet.name,
           createdAt: moment(Snippet.createdAt).fromNow(),
           modifiedAt: moment(Snippet.updatedAt).fromNow()
         }))
-        console.log(viewData)
+        //console.log(viewData)
+
+        viewData.snippets = snippetsInStorage.reverse()
 
         res.render('crud-snippets/snippets', { viewData }) 
     }
