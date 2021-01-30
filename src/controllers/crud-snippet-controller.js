@@ -18,6 +18,15 @@ import moment from 'moment'
 ]*/
 
 export class CrudSnippetController {
+  sessionAuthorize (req, res, next) {
+      if (!req.session.userId) {
+        const error = new Error('Not Found')
+          error.status = 404
+          return next(error)
+      } else {
+          next()
+      }
+  }
     index (req, res, next) {
         //console.log(req.headers.cookie)
 
