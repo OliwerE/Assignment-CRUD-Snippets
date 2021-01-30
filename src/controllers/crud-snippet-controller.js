@@ -146,11 +146,13 @@ export class CrudSnippetController {
           // starta edit här!
           return
         }
-        console.log('owner error')
+        console.log('owner error (snippet edit get)')
+        res.status(403)
+        res.render('errors/403')
         return
       }
       
-      console.log('slut error')
+      console.log('slut error') // ska ge error 500
       // ERROR 500 HÄR!
       
     }
@@ -194,8 +196,12 @@ export class CrudSnippetController {
               console.log('snippet update:  ', res)
             }
           })
+          return
         }
-        console.log('inte ägare')
+        console.log('owner error (snippet update post)')
+        res.status(403)
+        res.render('errors/403')
+        return
       } else {
         console.log('fel mer än en snippet!')
       }
@@ -233,7 +239,9 @@ export class CrudSnippetController {
           // starta edit här!
           return
         }
-        console.log('owner error')
+        console.log('owner error (snippet remove get)')
+        res.status(403)
+        res.render('errors/403')
         return
       }
       
@@ -278,7 +286,9 @@ export class CrudSnippetController {
         // starta edit här!
         return
       }
-      console.log('owner error')
+      console.log('owner error (snippet delete post)')
+      res.status(403)
+      res.render('errors/403')
       return
     }
     
