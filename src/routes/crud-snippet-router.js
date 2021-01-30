@@ -40,6 +40,7 @@ router.post('/snippets/:id/update', controller.snippetUpdate)
 
 
 router.get('/snippets/:id/remove', controller.snippetRemove) // lägg till session check
+router.post('/snippets/:id/delete', controller.snippetDelete) // lägg till session check
 
 
  // catch 404: alltid som sista route!

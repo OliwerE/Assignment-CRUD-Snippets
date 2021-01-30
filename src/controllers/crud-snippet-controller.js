@@ -242,6 +242,51 @@ export class CrudSnippetController {
       
     }
 
+  async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
+    const snippetID = req.params.id
+    const sessionUserName = req.session.userName
+
+    const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
+      id: Snippet._id,
+      name: Snippet.name,
+      snippet: Snippet.snippet,
+      owner: Snippet.owner,
+      createdAt: moment(Snippet.createdAt).fromNow(),
+      updatedAt: moment(Snippet.updatedAt).fromNow()
+    }))
+
+    if (foundSnippet.length === 1) {
+      if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
+
+        if (req.body.confirmBox === 'on') { // om confirm är vald
+          console.log('gör task!')
+          console.log(snippetID)
+
+          try { // kanske try över hela metoden??
+            await Snippet.deleteOne({ _id: snippetID })
+            req.session.flash = { type: 'flashSuccess', message: 'The snippet was removed successfully.' }
+            res.redirect('/crud/snippets')
+          } catch (err) {
+            req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
+            res.redirect('./remove')
+
+          }
+
+
+        }
+
+        // starta edit här!
+        return
+      }
+      console.log('owner error')
+      return
+    }
+    
+    console.log('slut error')
+    // ERROR 500 HÄR!
+    
+  }
+
 
 
 }
