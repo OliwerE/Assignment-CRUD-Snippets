@@ -3,19 +3,19 @@
     <h1>Crud Snippets</h1>
 </div>
 {{#if viewData.auth}}
-    <div class="navBlocks" id="links">
+    <div class="navBlocks" id="linksAuth">
         <ul id="navList">
             <a href="/"><li class="navListItem">Home</li></a>
             <a href="/crud/snippets"><li class="navListItem">Snippets</li></a>
             <a href="/crud/snippets/new"><li class="navListItem">New Snippet</li></a>
         </ul>
     </div>
-    <div class="navBlocks">
+    <div class="navBlocksAuth">
         <form id="logoutForm" method="post" action="/session/logout">
             <button>Sign Out</button>
         </form> <!-- Fixa css! -->
     </div>
-    <div class="navBlocks">
+    <div class="navBlocksAuth">
         <h1>{{viewData.userName}}</h1>
     </div>
 
