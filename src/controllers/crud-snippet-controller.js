@@ -99,6 +99,7 @@ export class CrudSnippetController {
       const foundSnippet = (await Snippet.find({_id: reqSnippet})).map(Snippet => ({
         id: Snippet._id,
         name: Snippet.name,
+        owner: Snippet.owner,
         snippet: Snippet.snippet,
         createdAt: moment(Snippet.createdAt).fromNow(),
         updatedAt: moment(Snippet.updatedAt).fromNow()
@@ -107,6 +108,11 @@ export class CrudSnippetController {
       viewData.snippet = foundSnippet[0]
 
       console.log(viewData.snippet)
+
+      if (req.session.userName === foundSnippet[0].owner) {
+        console.log('Äger snippet!')
+        viewData.isOwner = 'true'
+      }
 
       res.render('crud-Snippets/snippet', { viewData })
 
