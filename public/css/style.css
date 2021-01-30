@@ -123,10 +123,11 @@ footer p {
 /* show snippet*/
 
 #showSnippetContainer {
-    background-color: green;
+    background-color: #22b5e2;
     min-height: 500px;
-    width: 600px;
-    margin: 0 auto;
+    width: 800px;
+    margin: 10px auto 20px;
+    border-radius: 5px;
 }
 
 #showSnippetContainer h1 {
@@ -134,15 +135,20 @@ footer p {
 }
 
 #showSnippetCodeContainer {
-    background-color: yellow;
+    background-color: #ffffff;
     overflow-x: auto;
+    width: 95%;
     min-height: 600px;
+    border-radius: 5px;
+    margin: 0px auto 10px;
 }
 
 #dateData {
     text-align: center;
-    background-color: orange;
+    background-color: #3c3c3c;
+    color: #c5c5c5;
     height: 18px;
+    border-radius: 0px 0px 5px 5px;
 }
 
 #dateData p {
@@ -151,7 +157,8 @@ footer p {
 
 #removeDeleteUpdate {
     height: 50px;
-    background-color: lightblue;
+    background-color: #3c3c3c;
+    border-radius: 5px 5px 0px 0px;
 }
 
 /* New snippet page */
@@ -159,8 +166,8 @@ footer p {
 #snippetOwnerNav {
     list-style: none;
     height: 100%;
-    width: 550px;
-    margin-top: 0px;
+    width: 200px;
+    margin: 0px auto 0px;
 }
 
 .snippetOwnerNavItem {
@@ -168,14 +175,17 @@ footer p {
     float: left;
     height: 100%;
     min-width: 50px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    text-align: center;
+    line-height: 50px;
     padding: 0px 5px 0px 5px;
     margin-left: 10px;
-    color: black;
-    text-align: center;
+    color: #c5c5c5;
+
 }
 
 .snippetOwnerNavItem:hover {
-    background-color: greenyellow;
+    background-color: #757575;
 }
 
 /* Snippet form */
