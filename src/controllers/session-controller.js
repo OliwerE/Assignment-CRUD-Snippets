@@ -19,6 +19,26 @@ import { User } from '../models/user-model.js'
 let createdPass
 
 export class SessionController {
+  activeSessionCheck (req, res, next) {
+    if (!req.session.userId) {
+      const error = new Error('Not Found')
+      error.status = 404
+      return next(error)
+    } else {
+      next()
+    }
+  }
+
+  inactiveSessionCheck (req, res, next) {
+    if (req.session.userId) {
+      const error = new Error('Not Found')
+      error.status = 404
+      return next(error)
+    } else {
+      next()
+    }
+  }
+
   loginPage (req, res, next) {
       res.render('account/login')
   }

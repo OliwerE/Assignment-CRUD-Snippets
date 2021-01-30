@@ -11,46 +11,18 @@ import { SessionController } from '../controllers/session-controller.js'
 
 export const router = express.Router()
 
-
-const activeSessionCheck = (req, res, next) => {
-    if (!req.session.userId) {
-        res.status(404)
-        res.render('errors/404') // obs måste ha denna status och render! krav för #15
-        //res.redirect('/') // om anv inte är inloggad öppnas inte nästa sida, ist redirect till start.
-    } else {
-        next()
-    }
-}
-
-const inactiveSessionCheck = (req, res, next) => { // om användare är inloggad öppnas inte sidan
-    if (req.session.userId) {
-
-        // err kod här!!
-
-        const viewData = {
-            auth: true
-        }
-        res.render('errors/error', { viewData })
-    } else {
-        next()
-    }
-}
-
-
-
-
 const controller = new SessionController()
 
 // Login:
-router.get('/login', inactiveSessionCheck, controller.loginPage)
-router.post('/login',inactiveSessionCheck, controller.postLogin)
+router.get('/login', controller.inactiveSessionCheck, controller.loginPage)
+router.post('/login',controller.inactiveSessionCheck, controller.postLogin)
 
 // Logout
-router.post('/logout', activeSessionCheck, controller.logout)
+router.post('/logout', controller.activeSessionCheck, controller.logout)
 
 // Register
-router.get('/register', inactiveSessionCheck, controller.registerPage)
-router.post('/register',inactiveSessionCheck, controller.registerAccount)
+router.get('/register', controller.inactiveSessionCheck, controller.registerPage)
+router.post('/register',controller.inactiveSessionCheck, controller.registerAccount)
 
 
  // catch 404: alltid som sista route!
