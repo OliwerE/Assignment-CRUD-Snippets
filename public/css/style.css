@@ -41,7 +41,7 @@ header {
     font-weight: bold;
     font-size: 20px;
     background-color: #c5c5c5;
-    border-radius: 10px;
+    border-radius: 5px;
     height: 35px;
 }
 
@@ -74,7 +74,7 @@ header {
 .flashMSG {
     width: 600px;
     height: 30px;
-    border-radius: 40px;
+    border-radius: 5px;
     margin: 10px auto 0;
     text-align: center;
     padding-top: 15px
@@ -178,18 +178,57 @@ footer p {
     background-color: greenyellow;
 }
 
+/* Snippet form */
+
 #snippetFormContainer {
     width: 800px;
     height: 600px;
     margin: 0 auto;
-    background-color: green;
+    background-color: #22b5e2;
     text-align: center;
+    border-radius: 5px;
+    box-shadow: #777777 0px 20px 40px, #777777 0px 15px 10px;
+}
+
+#snippetForm {
+    padding-top: 20px;
 }
 
 #snippetForm textarea {
-    width: 500px;
-    height: 300px;
+    margin-top: 20px;
+    width: 95%;
+    height: 450px;
+    resize: none;
+    white-space: nowrap;
+    overflow-y: auto;
+    border-radius: 5px;
+    border: 1px solid;
+}
 
+#snippetForm div input {
+    width: 200px;
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+#snippetForm div label {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#snippetForm button {
+    margin-top: 10px;
+    width: 200px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#snippetForm button:hover {
+    transform: scale(0.9);
+    box-shadow: none;
+    cursor: pointer;
 }
 
 /* Login page */
@@ -199,17 +238,27 @@ footer p {
     height: 300px;
     width: 400px;
     margin: 0 auto;
-    border-radius: 30px;
+    border-radius: 5px;
+    box-shadow: #777777 0px 20px 40px, #777777 0px 15px 10px;
 }
 
 #loginContainer, #registerContainer {
     display: inline-block;
-    height: 100px;
+    height: 125px;
     width: 400px;
-    margin: 100px auto 0;
+    margin: 80px auto 0;
 }
 
 #loginContainer form input, #registerContainer form input {
     display: block;
     margin: 10px auto 0;
+    width: 200px;
+    height: 25px;
+    border-radius: 5px;
+    border: 1px solid;
+}
+
+#loginRegisterSubmitBtn:hover {
+    transform: scale(0.90);
+    cursor: pointer;
 }
