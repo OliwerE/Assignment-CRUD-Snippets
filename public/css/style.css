@@ -103,7 +103,7 @@ header {
 
 body main {
     background-color: #ffffff;
-    min-height: calc(100vh - 125px);
+    min-height: calc(100vh - 165px);
 }
 
 footer {
@@ -111,6 +111,7 @@ footer {
     width: 100%;
     background-color: #3c3c3c;
     height: 50px;
+    margin-top: 20px;
 }
 
 footer p {
@@ -122,14 +123,46 @@ footer p {
 
 /* Snippets page */
 
+#snippetTableContainer {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
 #snippetTable {
-    margin: 0 auto;
-    /*background-color: green;*/
     min-width: 600px;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+#snippetTable thead {
+    background-color: #3c3c3c;
+    color: #c5c5c5;
 }
 
 #snippetTable th, #snippetTable td {
     text-align: center;
+    height: 30px;
+}
+
+.snippetTr:nth-child(odd){
+    background-color: #e0e0e0;
+}
+
+.snippetTr:nth-child(even){
+    background-color: #ffffff;
+}
+
+.snippetTr:hover {
+    background-color: #757575;
+}
+
+.snippetTr a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    line-height: 30px;
+    color: black;
+    text-decoration: none;
 }
 
 /* show snippet*/
@@ -138,7 +171,7 @@ footer p {
     background-color: #22b5e2;
     min-height: 500px;
     width: 800px;
-    margin: 10px auto 20px;
+    margin: 20px auto 20px;
     border-radius: 5px;
 }
 
@@ -202,10 +235,10 @@ footer p {
 
 /* Snippet form */
 
-#snippetFormContainer {
+#main {
     width: 800px;
-    height: 600px;
-    margin: 0 auto;
+    min-height: 600px;
+    margin: 20px auto 0;
     background-color: #22b5e2;
     text-align: center;
     border-radius: 5px;
@@ -241,6 +274,7 @@ footer p {
 
 #snippetForm button {
     margin-top: 10px;
+    margin-bottom: 10px;
     width: 200px;
     height: 40px;
     font-size: 20px;
@@ -259,7 +293,7 @@ footer p {
     background-color: #22b5e2;
     height: 300px;
     width: 400px;
-    margin: 0 auto;
+    margin: 20px auto 0;
     border-radius: 5px;
     box-shadow: #777777 0px 20px 40px, #777777 0px 15px 10px;
 }
@@ -268,7 +302,7 @@ footer p {
     display: inline-block;
     height: 125px;
     width: 400px;
-    margin: 80px auto 0;
+    margin: 50px auto 0;
 }
 
 #loginContainer form input, #registerContainer form input {
