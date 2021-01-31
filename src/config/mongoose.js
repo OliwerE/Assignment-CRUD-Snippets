@@ -46,7 +46,7 @@
     cookie: {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24, // en dag
-      sameSite: 'lax'
+      sameSite: 'strict'
     },
     store: new mongoDBSessionStore({ mongooseConnection: mongoose.connection })
   }
