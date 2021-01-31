@@ -9,7 +9,7 @@ import bcrypt from 'bcrypt'
 import { User } from '../models/user-model.js'
 
 /**
- * Class represents a controller used to route users to the correct pages.
+ * Class represents a controller used to render pages for users.
  */
 export class SessionController {
   /**

@@ -5,26 +5,20 @@
  * @version 1.0.0
  */
 
-import bcrypt from 'bcrypt'
-
 import { Snippet } from '../models/snippet-model.js'
 import moment from 'moment'
 
-// TA BORT! tillfälliga "konton"
-/* const users = [// ANVÄND DATABAS!
-    { id: 1, username: 'anv1', password: 'secret' },
-    { id: 2, username: 'anv2', password: 'dsdsdsd' },
-    { id: 3, username: 'anv3', password: 'adsaadadaddad' }
-] */
-
 /**
- *
+ * Class represents a controller used to render pages for users.
  */
 export class CrudSnippetController {
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used to verify if a user is logged in.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Returns data to next function.
    */
   sessionAuthorize (req, res, next) {
     try {
@@ -43,9 +37,12 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used to verify if a user is the owner of a snippet.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Returns to the next function
    */
   async snippetAuthorizeChanges (req, res, next) {
     try {
@@ -79,9 +76,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with the index page to a user.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   index (req, res, next) {
     try {
