@@ -48,7 +48,7 @@
       maxAge: 1000 * 60 * 60 * 24, // en dag
       sameSite: 'strict'
     },
-    store: new mongoDBSessionStore({ mongooseConnection: mongoose.connection })
+    store: new mongoDBSessionStore({ mongooseConnection: mongoose.connection, clear_interval: 3600 })
   }
 
   if (application.get('env') === 'production') { // om i produktions server!
