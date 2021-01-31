@@ -20,7 +20,7 @@ let createdPass
 
 export class SessionController {
   activeSessionCheck (req, res, next) {
-    if (!req.session.userId) {
+    if (!req.session.userName) {
       const error = new Error('Not Found')
       error.status = 404
       return next(error)
@@ -30,7 +30,7 @@ export class SessionController {
   }
 
   inactiveSessionCheck (req, res, next) {
-    if (req.session.userId) {
+    if (req.session.userName) {
       const error = new Error('Not Found')
       error.status = 404
       return next(error)
@@ -72,7 +72,7 @@ export class SessionController {
             var passwordCheck = await bcrypt.compare(password, thisUser[0].password)
             console.log(passwordCheck)
             if (passwordCheck === true) {
-              req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt? OBS FEL! Se längre ner skapa konto är userid!
+              //req.session.userId = req.session.id // var innan:  thisUser.id  // är req.session.id pålitligt sätt? OBS FEL! Se längre ner skapa konto är userid!
               req.session.userName = username
               req.session.flash = { type: 'flashSuccess', message: 'Login successful!' }
               return res.redirect('/')
@@ -158,7 +158,7 @@ export class SessionController {
 
       //users.push(newUser) // Byt till mongoDB här!!
 
-      req.session.userId = req.session.id // OK göra såhär??
+      //req.session.userId = req.session.id // OK göra såhär??
       req.session.userName = username
 
       //console.log(users)

@@ -20,7 +20,7 @@ import moment from 'moment'
 export class CrudSnippetController {
   sessionAuthorize (req, res, next) {
     try{
-      if (!req.session.userId) {
+      if (!req.session.userName) {
         const error = new Error('Not Found')
           error.status = 404
           return next(error)
@@ -69,7 +69,7 @@ export class CrudSnippetController {
       try{
         //console.log(req.headers.cookie)
 
-        if (req.session.userId !== undefined) {
+        if (req.session.userName !== undefined) {
             const viewData = {
                 auth: true,
                 userName: req.session.userName
@@ -91,7 +91,7 @@ export class CrudSnippetController {
       try {
         //console.log(users)
         var viewData = {}
-        if (req.session.userId !== undefined) {
+        if (req.session.userName !== undefined) {
           viewData.auth = true
           viewData.userName = req.session.userName
         }
@@ -116,7 +116,7 @@ export class CrudSnippetController {
 
     newSnippetGet (req, res, next) {
       try{
-      if (req.session.userId !== undefined) {
+      if (req.session.userName !== undefined) {
           const viewData = {
               auth: true,
               userName: req.session.userName
@@ -161,7 +161,7 @@ export class CrudSnippetController {
       const reqSnippet = req.params.id
 
       var viewData = {}
-      if (req.session.userId !== undefined) {
+      if (req.session.userName !== undefined) {
         viewData.auth = true
         viewData.userName = req.session.userName
       }
