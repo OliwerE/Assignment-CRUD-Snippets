@@ -9,13 +9,16 @@ import bcrypt from 'bcrypt'
 import { User } from '../models/user-model.js'
 
 /**
- *
+ * Class represents a controller used to route users to the correct pages.
  */
 export class SessionController {
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used to verify if a user is logged in.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Returns data to next function.
    */
   activeSessionCheck (req, res, next) {
     if (!req.session.userName) {
@@ -28,9 +31,12 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used to verify if a user is logged out.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Returns data to next function.
    */
   inactiveSessionCheck (req, res, next) {
     if (req.session.userName) {
@@ -43,9 +49,11 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds the user with a login page.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   loginPage (req, res, next) {
     try {
@@ -58,9 +66,12 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used to login a user.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Redirects the user to the home or login page.
    */
   async postLogin (req, res, next) {
     try {
@@ -102,9 +113,11 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Logs out a user.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   async logout (req, res, next) {
     try {
@@ -126,9 +139,11 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with a register account page to the user.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   registerPage (req, res, next) {
     try {
@@ -141,9 +156,12 @@ export class SessionController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Used when a user registers a new account.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - A redirect response.
    */
   async registerAccount (req, res, next) {
     try {
@@ -153,10 +171,10 @@ export class SessionController {
       console.log('Username: ', username)
       console.log('Password: ', password)
 
+      let uniqueUsernameCheck
       if (username && password !== undefined) {
         const nameCheck = await User.find({ username: username })
 
-        var uniqueUsernameCheck
         if (nameCheck.length === 0) {
           uniqueUsernameCheck = true
         } else {
