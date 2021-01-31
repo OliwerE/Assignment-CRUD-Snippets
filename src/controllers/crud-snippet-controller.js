@@ -105,9 +105,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with a page displaying all snippets in the database.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   async showSnippetsList (req, res, next) {
     try {
@@ -138,9 +140,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with the create snippet page.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   newSnippetGet (req, res, next) {
     try {
@@ -161,9 +165,12 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Adds a new snippet to the database.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   * @returns {Function} - Redirects user to the snippets list.
    */
   async newSnippetPost (req, res, next) {
     try {
@@ -189,9 +196,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with a page displaying the requested snippet.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   async snippet (req, res, next) {
     try {
@@ -231,9 +240,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with the requested snippets edit page.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   async snippetEdit (req, res, next) {
     try {
@@ -255,7 +266,7 @@ export class CrudSnippetController {
       }
       console.log(viewData.snippet)
 
-      return res.render('crud-snippets/edit', { viewData })
+      res.render('crud-snippets/edit', { viewData })
     } catch (err) {
       const error = new Error('Internal Server Error')
       error.status = 500
@@ -264,9 +275,11 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Updates a snippet name and/or snippet in the database.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
   async snippetUpdate (req, res, next) {
     try {
@@ -278,11 +291,11 @@ export class CrudSnippetController {
 
       const _res = res
       const _req = req
-      return Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
+      await Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
         if (err) {
           const error = new Error('Internal Server Error')
           error.status = 500
-          return next(error)
+          next(error)
         }
         if (res) {
           if (res.n === 0) {
@@ -294,7 +307,7 @@ export class CrudSnippetController {
           } else {
             const error = new Error('Internal Server Error')
             error.status = 500
-            return next(error)
+            next(error)
           }
         }
       })
@@ -306,11 +319,13 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Responds with a snippets remove page.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
-  async snippetRemove (req, res, next) { // OBS mkt upprep från snippetEdit
+  async snippetRemove (req, res, next) {
     try {
       const snippetID = req.params.id
       const sessionUserName = req.session.userName
@@ -338,11 +353,13 @@ export class CrudSnippetController {
   }
 
   /**
-   * @param req
-   * @param res
-   * @param next
+   * Removes a snippet from the database.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
    */
-  async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
+  async snippetDelete (req, res, next) {
     try {
       const snippetID = req.params.id
       if (req.body.confirmBox === 'on') { // om confirm är vald
