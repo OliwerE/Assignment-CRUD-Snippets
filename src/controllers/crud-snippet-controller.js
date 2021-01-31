@@ -46,6 +46,7 @@ export class CrudSnippetController {
    */
   async snippetAuthorizeChanges (req, res, next) {
     try {
+      console.log('här!')
       const snippetID = req.params.id
       const sessionUserName = req.session.userName
 
@@ -63,14 +64,18 @@ export class CrudSnippetController {
           error.status = 500
           return next(error)
         }
+      } else if (foundSnippet.length === 0) {
+        const error = new Error('Not Found')
+        error.status = 404
+        return next(error)
       } else {
         const error = new Error('Internal Server Error')
         error.status = 500
         return next(error)
       }
     } catch (err) {
-      const error = new Error('Internal Server Error')
-      error.status = 500
+      const error = new Error('Not Found')
+      error.status = 404
       next(error)
     }
   }
