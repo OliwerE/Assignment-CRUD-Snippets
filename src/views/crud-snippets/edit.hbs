@@ -4,7 +4,7 @@
         <!-- validation summary hbs här! -->
         <div class="form-group">
             <label for="name">Snippet Name:</label>
-            <input type="text" name="name" value="{{viewData.snippet.name}}" placeholder="Enter snippet name" required="required"/>
+            <input type="text" name="name" value="{{viewData.snippet.name}}" placeholder="Enter snippet name" maxlength="25" required="required"/>
         </div>
         <textarea rows="4" cols="50" name="snippet" form="snippetForm" required="required">{{viewData.snippet.snippet}}</textarea>
         <br>

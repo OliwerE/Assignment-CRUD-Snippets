@@ -9,6 +9,7 @@ import mongoose from 'mongoose'
 const schema = new mongoose.Schema({
   name: {
     type: String,
+    maxlength: 25,
     required: true
   },
   snippet: {
