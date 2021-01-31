@@ -2,11 +2,11 @@
  * Mongoose user model.
  */
 
- import mongoose from 'mongoose'
+import mongoose from 'mongoose'
 
- // schema
+// schema
 
- const schema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -18,9 +18,9 @@
     minlength: [10, 'Password must be at least 10 characters.'],
     required: true
   }
-  }, {
-    timestamps: true,
-    versionKey: false
+}, {
+  timestamps: true,
+  versionKey: false
 })
 
 export const User = mongoose.model('User', schema)

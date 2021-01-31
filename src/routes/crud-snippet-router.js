@@ -25,10 +25,8 @@ router.get('/snippets/:id', controller.snippet)
 router.get('/snippets/:id/edit', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetEdit)
 router.post('/snippets/:id/update', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetUpdate)
 
-
 router.get('/snippets/:id/remove', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetRemove)
 router.post('/snippets/:id/delete', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetDelete)
 
-
- // catch 404: alltid som sista route!
- router.use('*', (req, res, next) => next(createError(404)))
+// catch 404: alltid som sista route!
+router.use('*', (req, res, next) => next(createError(404)))

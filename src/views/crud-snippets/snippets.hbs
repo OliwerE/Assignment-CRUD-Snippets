@@ -7,6 +7,7 @@
                     <th>Name</th>
                     <th>Created</th>
                     <th>Last modified</th>
+                    <th>Created by</th>
                 </tr>
             </thead>
             <tbody>        
@@ -16,6 +17,7 @@
                     <th><a href="/crud/snippets/{{this.id}}">{{this.name}}</a></th>
                     <td><a href="/crud/snippets/{{this.id}}">{{this.createdAt}}</a></td>
                     <td><a href="/crud/snippets/{{this.id}}">{{this.modifiedAt}}</a></td>
+                    <td><a href="/crud/snippets/{{this.id}}">{{this.owner}}</a></td>
                 </tr>
                 {{/each}}
                 {{else}}

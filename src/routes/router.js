@@ -23,6 +23,5 @@ router.use('/session', sessionRouter)
 
 // fångar 404:or
 router.use('*', (req, res, next) => {
-    next(createError(404))
+  next(createError(404))
 })
-

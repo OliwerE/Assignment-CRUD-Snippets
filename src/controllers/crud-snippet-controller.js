@@ -11,21 +11,29 @@ import { Snippet } from '../models/snippet-model.js'
 import moment from 'moment'
 
 // TA BORT! tillfälliga "konton"
-/*const users = [// ANVÄND DATABAS!
+/* const users = [// ANVÄND DATABAS!
     { id: 1, username: 'anv1', password: 'secret' },
     { id: 2, username: 'anv2', password: 'dsdsdsd' },
     { id: 3, username: 'anv3', password: 'adsaadadaddad' }
-]*/
+] */
 
+/**
+ *
+ */
 export class CrudSnippetController {
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
   sessionAuthorize (req, res, next) {
-    try{
+    try {
       if (!req.session.userName) {
         const error = new Error('Not Found')
-          error.status = 404
-          return next(error)
+        error.status = 404
+        return next(error)
       } else {
-          next()
+        next()
       }
     } catch (err) {
       const error = new Error('Internal Server Error')
@@ -34,12 +42,17 @@ export class CrudSnippetController {
     }
   }
 
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
   async snippetAuthorizeChanges (req, res, next) {
     try {
-    const snippetID = req.params.id
+      const snippetID = req.params.id
       const sessionUserName = req.session.userName
 
-      const foundSnippet = await Snippet.find({_id: snippetID})
+      const foundSnippet = await Snippet.find({ _id: snippetID })
 
       if (foundSnippet.length === 1) { // obs 404 för ej inloggade hanteras av sessionAuthorize som anropas innan denna metod!
         if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
@@ -65,65 +78,81 @@ export class CrudSnippetController {
     }
   }
 
-    index (req, res, next) {
-      try{
-        //console.log(req.headers.cookie)
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  index (req, res, next) {
+    try {
+      // console.log(req.headers.cookie)
 
-        if (req.session.userName !== undefined) {
-            const viewData = {
-                auth: true,
-                userName: req.session.userName
-            }
-            res.render('crud-snippets/index', { viewData })
-        } else {
-            res.render('crud-snippets/index')
-        }
-
-        //console.log(req.session.id)
-      } catch (err) {
-        const error = new Error('Internal Server Error')
-        error.status = 500
-        next(error)
-      }
-    }
-
-    async showSnippetsList (req, res, next) {
-      try {
-        //console.log(users)
-        var viewData = {}
-        if (req.session.userName !== undefined) {
-          viewData.auth = true
-          viewData.userName = req.session.userName
-        }
-
-        const snippetsInStorage = (await Snippet.find({})).map(Snippet => ({
-          id: Snippet._id,
-          name: Snippet.name,
-          createdAt: moment(Snippet.createdAt).fromNow(),
-          modifiedAt: moment(Snippet.updatedAt).fromNow()
-        }))
-        //console.log(viewData)
-
-        viewData.snippets = snippetsInStorage.reverse()
-
-        res.render('crud-snippets/snippets', { viewData }) 
-      } catch (err) {
-        const error = new Error('Internal Server Error')
-        error.status = 500
-        next(error)
-      }
-    }
-
-    newSnippetGet (req, res, next) {
-      try{
       if (req.session.userName !== undefined) {
-          const viewData = {
-              auth: true,
-              userName: req.session.userName
-          }
-          res.render('crud-snippets/new', { viewData })
+        const viewData = {
+          auth: true,
+          userName: req.session.userName
+        }
+        res.render('crud-snippets/index', { viewData })
       } else {
-          res.render('crud-snippets/new')
+        res.render('crud-snippets/index')
+      }
+
+      // console.log(req.session.id)
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
+  }
+
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  async showSnippetsList (req, res, next) {
+    try {
+      // console.log(users)
+      const viewData = {}
+      if (req.session.userName !== undefined) {
+        viewData.auth = true
+        viewData.userName = req.session.userName
+      }
+
+      const snippetsInStorage = (await Snippet.find({})).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name,
+        owner: Snippet.owner,
+        createdAt: moment(Snippet.createdAt).fromNow(),
+        modifiedAt: moment(Snippet.updatedAt).fromNow()
+      }))
+      // console.log(viewData)
+
+      viewData.snippets = snippetsInStorage.reverse()
+
+      res.render('crud-snippets/snippets', { viewData })
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
+  }
+
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  newSnippetGet (req, res, next) {
+    try {
+      if (req.session.userName !== undefined) {
+        const viewData = {
+          auth: true,
+          userName: req.session.userName
+        }
+        res.render('crud-snippets/new', { viewData })
+      } else {
+        res.render('crud-snippets/new')
       }
     } catch (err) {
       const error = new Error('Internal Server Error')
@@ -132,41 +161,50 @@ export class CrudSnippetController {
     }
   }
 
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
   async newSnippetPost (req, res, next) {
     try {
-    const snippetName = req.body.name
-    const snippetData = req.body.snippet
-    console.log('POST!')
+      const snippetName = req.body.name
+      const snippetData = req.body.snippet
+      console.log('POST!')
 
+      const newSnippet = new Snippet({
+        name: snippetName,
+        snippet: snippetData,
+        owner: req.session.userName
+      })
 
-    const newSnippet = new Snippet({
-      name: snippetName,
-      snippet: snippetData,
-      owner: req.session.userName
-    })
+      await newSnippet.save() // Sparar snippet i mongo
 
-    await newSnippet.save() // Sparar snippet i mongo
-
-    req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
-    return res.redirect('/crud/snippets') // startsidan
-  } catch (err) {
-    const error = new Error('Internal Server Error')
-    error.status = 500
-    next(error)
+      req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
+      return res.redirect('/crud/snippets') // startsidan
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
   }
-  }
 
-    async snippet (req, res, next) {
-      try{
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  async snippet (req, res, next) {
+    try {
       const reqSnippet = req.params.id
 
-      var viewData = {}
+      const viewData = {}
       if (req.session.userName !== undefined) {
         viewData.auth = true
         viewData.userName = req.session.userName
       }
 
-      const foundSnippet = (await Snippet.find({_id: reqSnippet})).map(Snippet => ({
+      const foundSnippet = (await Snippet.find({ _id: reqSnippet })).map(Snippet => ({
         id: Snippet._id,
         name: Snippet.name,
         owner: Snippet.owner,
@@ -176,7 +214,7 @@ export class CrudSnippetController {
       }))
       viewData.snippet = foundSnippet[0]
 
-      //console.log(viewData.snippet)
+      // console.log(viewData.snippet)
 
       if (req.session.userName === foundSnippet[0].owner) {
         console.log('Äger snippet!')
@@ -185,27 +223,30 @@ export class CrudSnippetController {
 
       res.render('crud-Snippets/snippet', { viewData })
 
-
       // lägg till 404
     } catch {
       const error = new Error('Not Found')
       error.status = 404
       next(error)
     }
+  }
 
-    }
-
-    async snippetEdit (req, res, next) {
-      try {
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  async snippetEdit (req, res, next) {
+    try {
       const snippetID = req.params.id
 
-      const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
+      const foundSnippet = (await Snippet.find({ _id: snippetID })).map(Snippet => ({
         id: Snippet._id,
         name: Snippet.name,
-        snippet: Snippet.snippet,
-        //owner: Snippet.owner,
-        //createdAt: moment(Snippet.createdAt).fromNow(),
-        //updatedAt: moment(Snippet.updatedAt).fromNow()
+        snippet: Snippet.snippet
+        // owner: Snippet.owner,
+        // createdAt: moment(Snippet.createdAt).fromNow(),
+        // updatedAt: moment(Snippet.updatedAt).fromNow()
       }))
 
       const viewData = {
@@ -221,11 +262,16 @@ export class CrudSnippetController {
       error.status = 500
       next(error)
     }
-    }
+  }
 
-    async snippetUpdate (req, res, next) {
-      try {
-        const snippetID = req.params.id
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  async snippetUpdate (req, res, next) {
+    try {
+      const snippetID = req.params.id
       const snippetName = req.body.name
       const snippetData = req.body.snippet
 
@@ -258,53 +304,63 @@ export class CrudSnippetController {
       error.status = 500
       next(error)
     }
-    }
+  }
 
-    async snippetRemove (req, res, next) { // OBS mkt upprep från snippetEdit
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
+  async snippetRemove (req, res, next) { // OBS mkt upprep från snippetEdit
     try {
       const snippetID = req.params.id
-    const sessionUserName = req.session.userName
+      const sessionUserName = req.session.userName
 
-    const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
-      id: Snippet._id,
-      name: Snippet.name,
-    }))
+      const foundSnippet = (await Snippet.find({ _id: snippetID })).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name
+      }))
 
-    const viewData = {
-      auth: true,
-      userName: sessionUserName,
-      snippetName: foundSnippet[0].name,
-      snippetID: foundSnippet[0].id
+      const viewData = {
+        auth: true,
+        userName: sessionUserName,
+        snippetName: foundSnippet[0].name,
+        snippetID: foundSnippet[0].id
+      }
+
+      // console.log(viewData)
+
+      res.render('crud-snippets/remove', { viewData })
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
     }
-
-    //console.log(viewData)
-
-    res.render('crud-snippets/remove', { viewData })
-  } catch (err) {
-    const error = new Error('Internal Server Error')
-    error.status = 500
-    next(error)
   }
-}
 
+  /**
+   * @param req
+   * @param res
+   * @param next
+   */
   async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
     try {
-    const snippetID = req.params.id
-    if (req.body.confirmBox === 'on') { // om confirm är vald
-      //try { // kanske try över hela metoden??
+      const snippetID = req.params.id
+      if (req.body.confirmBox === 'on') { // om confirm är vald
+      // try { // kanske try över hela metoden??
         await Snippet.deleteOne({ _id: snippetID })
         req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
         res.redirect('/crud/snippets')
-      /*} catch (err) {
+      /* } catch (err) {
         req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
         res.redirect('./remove')
 
-      }*/
+      } */
+      }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
     }
-  } catch (err) {
-    const error = new Error('Internal Server Error')
-    error.status = 500
-    next(error)
-  }
   }
 }

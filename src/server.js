@@ -7,7 +7,6 @@
 
 import express from 'express'
 import hbs from 'express-hbs'
-import session from 'express-session'
 import helmet from 'helmet'
 import logger from 'morgan'
 import { dirname, join } from 'path'
@@ -15,11 +14,14 @@ import { fileURLToPath } from 'url'
 import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
 
+/**
+ * Function represents an Express web server configuration.
+ */
 const startApplication = async () => {
-
-
   const application = express()
+
   await connectDB(application) // ansluter till databasen
+
   const fullDirName = dirname(fileURLToPath(import.meta.url))
 
   application.use(helmet()) // extra säkerthet med http headers för bl.a xss!
@@ -43,7 +45,7 @@ const startApplication = async () => {
 
   // FLYTTAD TILL MONGOOSE.js
 
-  /*const sessionOptions = {
+  /* const sessionOptions = {
     name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -60,7 +62,7 @@ const startApplication = async () => {
     sessionOptions.cookie.secure = true // kräv säkra kakor!
   }
 
-  application.use(session(sessionOptions))*/
+  application.use(session(sessionOptions)) */
 
   // tar bort flash messages efter en gång
   application.use((req, res, next) => {
@@ -88,10 +90,8 @@ const startApplication = async () => {
       return res.status(500).sendFile(join(fullDirName, 'views', 'errors', '500.html'))
     }
 
-
-
     // dev only: ta bort sen!
-    //res.status(err.status || 500).render('errors/error', { error: err })
+    // res.status(err.status || 500).render('errors/error', { error: err })
   })
 
   application.listen(process.env.PORT, () => {

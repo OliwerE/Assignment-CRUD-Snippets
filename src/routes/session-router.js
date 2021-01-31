@@ -15,15 +15,14 @@ const controller = new SessionController()
 
 // Login:
 router.get('/login', controller.inactiveSessionCheck, controller.loginPage)
-router.post('/login',controller.inactiveSessionCheck, controller.postLogin)
+router.post('/login', controller.inactiveSessionCheck, controller.postLogin)
 
 // Logout
 router.post('/logout', controller.activeSessionCheck, controller.logout)
 
 // Register
 router.get('/register', controller.inactiveSessionCheck, controller.registerPage)
-router.post('/register',controller.inactiveSessionCheck, controller.registerAccount)
+router.post('/register', controller.inactiveSessionCheck, controller.registerAccount)
 
-
- // catch 404: alltid som sista route!
- router.use('*', (req, res, next) => next(createError(404)))
+// catch 404: alltid som sista route!
+router.use('*', (req, res, next) => next(createError(404)))
