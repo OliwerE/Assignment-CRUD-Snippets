@@ -40,10 +40,18 @@ export class SessionController {
   }
 
   loginPage (req, res, next) {
+    try {
       res.render('account/login')
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
+
   }
 
   async postLogin (req, res, next) {
+    try {
       const username = req.body.username
       const password = req.body.password
 
@@ -75,10 +83,15 @@ export class SessionController {
           req.session.flash = { type: 'flashError', message: 'Login Failed! (401)' }
           return res.redirect('/session/login')
       }
+     } catch (err) {
+        const error = new Error('Internal Server Error')
+        error.status = 500
+        next(error)
+      }
   }
 
   async logout (req, res, next) {
-    console.log('här!')
+    try{
      await req.session.destroy(/*e => { // Något fel här.. behövs inte?
       if (e !== undefined) {
         console.log(e)
@@ -89,13 +102,25 @@ export class SessionController {
     }*/)
       //req.session.flash = { type: 'flashSuccess', message: 'You are logged out!' }
       res.redirect('/') // redirect här? isf går inte viewdata att skicka!
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
   }
 
   registerPage (req, res, next) {
-    res.render('account/register')
+    try{
+      res.render('account/register')
+  } catch (err) {
+    const error = new Error('Internal Server Error')
+    error.status = 500
+    next(error)
+  }
   }
 
   async registerAccount (req, res, next) {
+    try{
     const username = req.body.username
     const password = req.body.password //await bcrypt.hash(req.body.password, 8) // byt till bcrypt sen!
 
@@ -144,8 +169,10 @@ export class SessionController {
       req.session.flash = { type: 'flashError', message: 'Choose another username.' }
       return res.redirect('./register')
     }
-    
-
-
+  } catch (err) {
+    const error = new Error('Internal Server Error')
+    error.status = 500
+    next(error)
+  }
   }
 }

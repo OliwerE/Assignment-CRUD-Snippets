@@ -19,6 +19,7 @@ import moment from 'moment'
 
 export class CrudSnippetController {
   sessionAuthorize (req, res, next) {
+    try{
       if (!req.session.userId) {
         const error = new Error('Not Found')
           error.status = 404
@@ -26,9 +27,15 @@ export class CrudSnippetController {
       } else {
           next()
       }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
   }
 
   async snippetAuthorizeChanges (req, res, next) {
+    try {
     const snippetID = req.params.id
       const sessionUserName = req.session.userName
 
@@ -51,9 +58,15 @@ export class CrudSnippetController {
         error.status = 500
         return next(error)
       }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
   }
 
     index (req, res, next) {
+      try{
         //console.log(req.headers.cookie)
 
         if (req.session.userId !== undefined) {
@@ -67,9 +80,15 @@ export class CrudSnippetController {
         }
 
         //console.log(req.session.id)
+      } catch (err) {
+        const error = new Error('Internal Server Error')
+        error.status = 500
+        next(error)
+      }
     }
 
     async showSnippetsList (req, res, next) {
+      try {
         //console.log(users)
         var viewData = {}
         if (req.session.userId !== undefined) {
@@ -88,9 +107,15 @@ export class CrudSnippetController {
         viewData.snippets = snippetsInStorage.reverse()
 
         res.render('crud-snippets/snippets', { viewData }) 
+      } catch (err) {
+        const error = new Error('Internal Server Error')
+        error.status = 500
+        next(error)
+      }
     }
 
     newSnippetGet (req, res, next) {
+      try{
       if (req.session.userId !== undefined) {
           const viewData = {
               auth: true,
@@ -99,15 +124,21 @@ export class CrudSnippetController {
           res.render('crud-snippets/new', { viewData })
       } else {
           res.render('crud-snippets/new')
-      }          
+      }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
   }
 
   async newSnippetPost (req, res, next) {
-  const snippetName = req.body.name
-  const snippetData = req.body.snippet
-  console.log('POST!')
+    try {
+    const snippetName = req.body.name
+    const snippetData = req.body.snippet
+    console.log('POST!')
 
-  try {
+
     const newSnippet = new Snippet({
       name: snippetName,
       snippet: snippetData,
@@ -119,12 +150,14 @@ export class CrudSnippetController {
     req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
     return res.redirect('/crud/snippets') // startsidan
   } catch (err) {
-    console.log(err) // fixa för anv sen!
+    const error = new Error('Internal Server Error')
+    error.status = 500
+    next(error)
   }
-
   }
 
     async snippet (req, res, next) {
+      try{
       const reqSnippet = req.params.id
 
       var viewData = {}
@@ -155,10 +188,16 @@ export class CrudSnippetController {
 
 
       // lägg till 404
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
 
     }
 
     async snippetEdit (req, res, next) {
+      try {
       const snippetID = req.params.id
 
       const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
@@ -178,9 +217,15 @@ export class CrudSnippetController {
       console.log(viewData.snippet)
 
       return res.render('crud-snippets/edit', { viewData })
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
     }
 
     async snippetUpdate (req, res, next) {
+      try {
         const snippetID = req.params.id
       const snippetName = req.body.name
       const snippetData = req.body.snippet
@@ -209,10 +254,16 @@ export class CrudSnippetController {
           }
         }
       })
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
     }
 
     async snippetRemove (req, res, next) { // OBS mkt upprep från snippetEdit
-    const snippetID = req.params.id
+    try {
+      const snippetID = req.params.id
     const sessionUserName = req.session.userName
 
     const foundSnippet = (await Snippet.find({_id: snippetID})).map(Snippet => ({
@@ -230,9 +281,15 @@ export class CrudSnippetController {
     //console.log(viewData)
 
     res.render('crud-snippets/remove', { viewData })
+  } catch (err) {
+    const error = new Error('Internal Server Error')
+    error.status = 500
+    next(error)
+  }
 }
 
   async snippetDelete (req, res, next) { // OBS mkt upprep från snippetEdit
+    try {
     const snippetID = req.params.id
     if (req.body.confirmBox === 'on') { // om confirm är vald
       //try { // kanske try över hela metoden??
@@ -245,5 +302,10 @@ export class CrudSnippetController {
 
       }*/
     }
+  } catch (err) {
+    const error = new Error('Internal Server Error')
+    error.status = 500
+    next(error)
+  }
   }
 }
