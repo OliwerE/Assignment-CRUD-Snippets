@@ -174,10 +174,9 @@ export class CrudSnippetController {
         createdAt: moment(Snippet.createdAt).fromNow(),
         updatedAt: moment(Snippet.updatedAt).fromNow()
       }))
-
       viewData.snippet = foundSnippet[0]
 
-      console.log(viewData.snippet)
+      //console.log(viewData.snippet)
 
       if (req.session.userName === foundSnippet[0].owner) {
         console.log('Äger snippet!')
@@ -188,9 +187,9 @@ export class CrudSnippetController {
 
 
       // lägg till 404
-    } catch (err) {
-      const error = new Error('Internal Server Error')
-      error.status = 500
+    } catch {
+      const error = new Error('Not Found')
+      error.status = 404
       next(error)
     }
 
