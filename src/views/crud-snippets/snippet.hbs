@@ -1,8 +1,6 @@
-<!-- Displays a snippet -->
 {{#if viewData.snippet}}
   <div id="showSnippetContainer">
     {{#if viewData.isOwner}}
-    <!-- Ska bara visas om ägaren! -->
     <div id="removeDeleteUpdate">
         <ul id="snippetOwnerNav">
           <a href="/crud/snippets/{{viewData.snippet.id}}/edit"><li class="snippetOwnerNavItem">Edit</li></a>

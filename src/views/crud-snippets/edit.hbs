@@ -1,7 +1,6 @@
 <div id="main">
     <h1 class="pageHeader">Update: {{viewData.snippet.name}}</h1>
     <form id="snippetForm" method="post" action="/crud/snippets/{{viewData.snippet.id}}/update">
-        <!-- validation summary hbs här! -->
         <div class="form-group">
             <label for="name">Snippet Name:</label>
             <input type="text" name="name" value="{{viewData.snippet.name}}" placeholder="Enter snippet name" maxlength="25" required="required"/>
