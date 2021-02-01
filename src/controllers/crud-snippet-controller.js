@@ -312,8 +312,9 @@ export class CrudSnippetController {
           next(error)
         }
         if (res) {
+          console.log(res)
           if (res.n === 0) {
-            _req.session.flash = { type: 'flashError', message: 'Internal Server Error. (500)' }
+            _req.session.flash = { type: 'flashError', message: 'Could not update snippet' }
             _res.redirect('./edit')
           } else if (res.n === 1) {
             _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been updated successfully.' }
@@ -326,9 +327,8 @@ export class CrudSnippetController {
         }
       })
     } catch (err) {
-      const error = new Error('Internal Server Error')
-      error.status = 500
-      next(error)
+      req.session.flash = { type: 'flashError', message: 'Could not update snippet' }
+      res.redirect('./edit')
     }
   }
 
@@ -387,9 +387,13 @@ export class CrudSnippetController {
               console.log(err)
               _req.session.flash = { type: 'flashError', message: 'Could not remove snippet' }
               _res.redirect('./remove')
-            } else {
+            } else if (res.deletedCount === 1) {
               _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
               _res.redirect('/crud/snippets')
+            } else {
+              const error = new Error('Internal Server Error')
+              error.status = 500
+              next(error)
             }
           }
         })
