@@ -136,6 +136,36 @@ export class CrudSnippetController {
   }
 
   /**
+   * Responds with a page displaying all snippets created by the user.
+   *
+   * @param {object} req - The request object.
+   * @param {object} res - The response object.
+   * @param {Function} next - Next function.
+   */
+  async userSnippets (req, res, next) {
+    try {
+      const viewData = {}
+      if (req.session.userName !== undefined) {
+        viewData.auth = true
+        viewData.userName = req.session.userName
+      }
+      const snippetsInStorage = (await Snippet.find({ owner: req.session.userName })).map(Snippet => ({
+        id: Snippet._id,
+        name: Snippet.name,
+        createdAt: moment(Snippet.createdAt).fromNow(),
+        modifiedAt: moment(Snippet.updatedAt).fromNow()
+      }))
+      viewData.snippets = snippetsInStorage.reverse() // Adds all snippets to viewData. (Newest snippet first)
+
+      res.render('crud-snippets/mysnippets', { viewData })
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
+      next(error)
+    }
+  }
+
+  /**
    * Responds with the create snippet page.
    *
    * @param {object} req - The request object.

@@ -5,7 +5,7 @@ body {
 }
 
 header {
-    min-width: 870px;
+    min-width: 990px;
     width: 100%;
     height: 75px;
     background-color: #3c3c3c;
@@ -44,6 +44,11 @@ header {
     background-color: #c5c5c5;
     border-radius: 5px;
     height: 35px;
+}
+
+#logoutForm button:hover {
+    cursor: pointer;
+    transform: scale(0.9);
 }
 
 .navListItem {
@@ -119,6 +124,35 @@ footer p {
     color: #ffffff;
     font-family: "Comic Sans MS", "Comic Sans", cursive;
     margin-top: 14px;
+}
+
+/* Index page */
+
+#indexButtonContainer {
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.indexButtons {
+    display: block;
+    width: 100%;
+    height: 50px;
+    margin-top: 75px;
+    text-decoration: none;
+    background-color: #c5c5c5;
+    color: black;
+    border-radius: 5px;
+    line-height: 50px;
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: 20px;
+    font-weight: bold;
+    border: 1px solid;
+}
+
+.indexButtons:hover {
+cursor: pointer;
+transform: scale(0.9);
 }
 
 /* Snippets page */

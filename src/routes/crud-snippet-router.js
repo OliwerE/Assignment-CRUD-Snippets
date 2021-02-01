@@ -17,6 +17,8 @@ router.get('/', controller.index)
 
 router.get('/snippets', controller.showSnippetsList)
 
+router.get('/mysnippets', controller.userSnippets)
+
 router.get('/snippets/new', controller.sessionAuthorize, controller.newSnippetGet)
 router.post('/snippets/create', controller.sessionAuthorize, controller.newSnippetPost)
 

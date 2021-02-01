@@ -1,3 +1,14 @@
 <div id="main">
-    <h1 class="pageHeader">Crud Snippet application</h1>
+    <h1 class="pageHeader">Crud Snippet Application</h1>
+    {{#if viewData.auth}}
+        <div id="indexButtonContainer">
+            <a class="indexButtons" href="/crud/snippets">Snippets</a>
+            <a class="indexButtons" href="/crud/mysnippets">My Snippets</a>
+        </div>
+    {{else}}
+        <div id="indexButtonContainer">
+            <a class="indexButtons" href="/session/login">Login</a>
+            <a class="indexButtons" href="/session/register">Register</a>
+        </div>
+    {{/if}}
 </div>
