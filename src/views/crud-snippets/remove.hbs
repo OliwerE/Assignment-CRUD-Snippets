@@ -1,6 +1,6 @@
 <div id="main">
     <h1 class="pageHeader">Remove Snippet: {{viewData.snippetName}}</h1>
-    <p>If you want to remove <b>{{viewData.snippetName}}</b> permanently, Check the box bellow and click on "Remove snippet"</p>
+    <p>Warning: "<b>{{viewData.snippetName}}</b>" is going to be removed permanently.</p>
     <form id="snippetForm" method="post" action="/crud/snippets/{{viewData.snippetID}}/delete">
         <div class="form-group">
             <label for="confirmBox">Confirm:</label>
