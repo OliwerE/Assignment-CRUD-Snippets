@@ -374,10 +374,25 @@ export class CrudSnippetController {
   async snippetDelete (req, res, next) {
     try {
       const snippetID = req.params.id
+      const _req = req
+      const _res = res
       if (req.body.confirmBox === 'on') { // If confirm box is checked.
-        await Snippet.deleteOne({ _id: snippetID })
-        req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
-        res.redirect('/crud/snippets')
+        await Snippet.deleteOne({ _id: snippetID }, (err, res) => {
+          if (err) {
+            const error = new Error('Internal Server Error')
+            error.status = 500
+            next(error)
+          } else if (res) {
+            if (res.deletedCount === 0) {
+              console.log(err)
+              _req.session.flash = { type: 'flashError', message: 'Could not remove snippet' }
+              _res.redirect('./remove')
+            } else {
+              _req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
+              _res.redirect('/crud/snippets')
+            }
+          }
+        })
       } else {
         req.session.flash = { type: 'flashError', message: 'Removal not confirmed!' }
         res.redirect('./remove')
