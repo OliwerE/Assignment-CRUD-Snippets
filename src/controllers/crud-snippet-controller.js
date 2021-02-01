@@ -214,9 +214,8 @@ export class CrudSnippetController {
       req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
       return res.redirect('/crud/snippets')
     } catch (err) {
-      const error = new Error('Internal Server Error')
-      error.status = 500
-      next(error)
+      req.session.flash = { type: 'flashError', message: 'Could not save snippet' }
+      return res.redirect('./new')
     }
   }
 
