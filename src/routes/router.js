@@ -21,7 +21,7 @@ router.use('/crud', crudSnippetRouter)
 
 router.use('/session', sessionRouter)
 
-// fångar 404:or
+// All other pages
 router.use('*', (req, res, next) => {
   next(createError(404))
 })

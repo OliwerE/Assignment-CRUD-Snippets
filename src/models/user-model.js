@@ -4,8 +4,6 @@
 
 import mongoose from 'mongoose'
 
-// schema
-
 const schema = new mongoose.Schema({
   username: {
     type: String,

@@ -26,7 +26,6 @@ export const connectDB = async (application) => {
     console.log('Mongoose is disconnected.')
   })
 
-  // om node stängs
   process.on('SIGINT', () => {
     mongoose.connection.close(() => {
       console.log('Mongoose is disconnected because of application termination.')
@@ -34,14 +33,13 @@ export const connectDB = async (application) => {
     })
   })
 
-  // anslutning till databasen
   await mongoose.connect(process.env.DB_CONNECTION_STRING, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
 
-  const MongoDBSessionStore = MongoStore(session)
+  const MongoDBSessionStore = MongoStore(session) // Used for session storage in mongoDB
 
   const sessionOptions = {
     name: process.env.SESSION_NAME,
@@ -56,9 +54,9 @@ export const connectDB = async (application) => {
     store: new MongoDBSessionStore({ mongooseConnection: mongoose.connection, clear_interval: 3600 })
   }
 
-  if (application.get('env') === 'production') { // om i produktions server!
-    application.set('trust proxy', 1) // lita på första proxyn
-    sessionOptions.cookie.secure = true // kräv säkra kakor!
+  if (application.get('env') === 'production') { // trusts first proxy and requires secure cookies if in production
+    application.set('trust proxy', 1)
+    sessionOptions.cookie.secure = true
   }
 
   application.use(session(sessionOptions))

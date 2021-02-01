@@ -22,7 +22,7 @@ export class CrudSnippetController {
    */
   sessionAuthorize (req, res, next) {
     try {
-      if (!req.session.userName) {
+      if (!req.session.userName) { // true is logged in
         const error = new Error('Not Found')
         error.status = 404
         return next(error)
@@ -46,13 +46,12 @@ export class CrudSnippetController {
    */
   async snippetAuthorizeChanges (req, res, next) {
     try {
-      console.log('här!')
       const snippetID = req.params.id
       const sessionUserName = req.session.userName
 
       const foundSnippet = await Snippet.find({ _id: snippetID })
 
-      if (foundSnippet.length === 1) { // obs 404 för ej inloggade hanteras av sessionAuthorize som anropas innan denna metod!
+      if (foundSnippet.length === 1) {
         if ((foundSnippet[0].owner === sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
           return next()
         } if ((foundSnippet[0].owner !== sessionUserName) && ((foundSnippet[0].owner !== undefined) || (sessionUserName !== undefined))) {
@@ -89,9 +88,7 @@ export class CrudSnippetController {
    */
   index (req, res, next) {
     try {
-      // console.log(req.headers.cookie)
-
-      if (req.session.userName !== undefined) {
+      if (req.session.userName !== undefined) { // Adds sign out button and username if logged in
         const viewData = {
           auth: true,
           userName: req.session.userName
@@ -100,8 +97,6 @@ export class CrudSnippetController {
       } else {
         res.render('crud-snippets/index')
       }
-
-      // console.log(req.session.id)
     } catch (err) {
       const error = new Error('Internal Server Error')
       error.status = 500
@@ -118,13 +113,11 @@ export class CrudSnippetController {
    */
   async showSnippetsList (req, res, next) {
     try {
-      // console.log(users)
       const viewData = {}
       if (req.session.userName !== undefined) {
         viewData.auth = true
         viewData.userName = req.session.userName
       }
-
       const snippetsInStorage = (await Snippet.find({})).map(Snippet => ({
         id: Snippet._id,
         name: Snippet.name,
@@ -132,9 +125,7 @@ export class CrudSnippetController {
         createdAt: moment(Snippet.createdAt).fromNow(),
         modifiedAt: moment(Snippet.updatedAt).fromNow()
       }))
-      // console.log(viewData)
-
-      viewData.snippets = snippetsInStorage.reverse()
+      viewData.snippets = snippetsInStorage.reverse() // Adds all snippets to viewData. (Newest snippet first)
 
       res.render('crud-snippets/snippets', { viewData })
     } catch (err) {
@@ -153,7 +144,7 @@ export class CrudSnippetController {
    */
   newSnippetGet (req, res, next) {
     try {
-      if (req.session.userName !== undefined) {
+      if (req.session.userName !== undefined) { // Adds sign out button and username if logged in
         const viewData = {
           auth: true,
           userName: req.session.userName
@@ -181,7 +172,6 @@ export class CrudSnippetController {
     try {
       const snippetName = req.body.name
       const snippetData = req.body.snippet
-      console.log('POST!')
 
       const newSnippet = new Snippet({
         name: snippetName,
@@ -189,10 +179,10 @@ export class CrudSnippetController {
         owner: req.session.userName
       })
 
-      await newSnippet.save() // Sparar snippet i mongo
+      await newSnippet.save()
 
       req.session.flash = { type: 'flashSuccess', message: 'Your snippet has been created!' }
-      return res.redirect('/crud/snippets') // startsidan
+      return res.redirect('/crud/snippets')
     } catch (err) {
       const error = new Error('Internal Server Error')
       error.status = 500
@@ -212,7 +202,7 @@ export class CrudSnippetController {
       const reqSnippet = req.params.id
 
       const viewData = {}
-      if (req.session.userName !== undefined) {
+      if (req.session.userName !== undefined) { // Adds sign out button and username if logged in
         viewData.auth = true
         viewData.userName = req.session.userName
       }
@@ -227,16 +217,11 @@ export class CrudSnippetController {
       }))
       viewData.snippet = foundSnippet[0]
 
-      // console.log(viewData.snippet)
-
-      if (req.session.userName === foundSnippet[0].owner) {
-        console.log('Äger snippet!')
+      if (req.session.userName === foundSnippet[0].owner) { // Adds edit and remove buttons if the user owns the snippet
         viewData.isOwner = 'true'
       }
 
       res.render('crud-Snippets/snippet', { viewData })
-
-      // lägg till 404
     } catch {
       const error = new Error('Not Found')
       error.status = 404
@@ -259,9 +244,6 @@ export class CrudSnippetController {
         id: Snippet._id,
         name: Snippet.name,
         snippet: Snippet.snippet
-        // owner: Snippet.owner,
-        // createdAt: moment(Snippet.createdAt).fromNow(),
-        // updatedAt: moment(Snippet.updatedAt).fromNow()
       }))
 
       const viewData = {
@@ -269,7 +251,6 @@ export class CrudSnippetController {
         userName: req.session.userName,
         snippet: foundSnippet[0]
       }
-      console.log(viewData.snippet)
 
       res.render('crud-snippets/edit', { viewData })
     } catch (err) {
@@ -292,11 +273,9 @@ export class CrudSnippetController {
       const snippetName = req.body.name
       const snippetData = req.body.snippet
 
-      console.log(snippetName, snippetData)
-
       const _res = res
       const _req = req
-      await Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => {
+      await Snippet.updateOne({ _id: snippetID }, { name: snippetName, snippet: snippetData }, (err, res) => { // Updates snippet name and data in the database
         if (err) {
           const error = new Error('Internal Server Error')
           error.status = 500
@@ -347,8 +326,6 @@ export class CrudSnippetController {
         snippetID: foundSnippet[0].id
       }
 
-      // console.log(viewData)
-
       res.render('crud-snippets/remove', { viewData })
     } catch (err) {
       const error = new Error('Internal Server Error')
@@ -367,16 +344,13 @@ export class CrudSnippetController {
   async snippetDelete (req, res, next) {
     try {
       const snippetID = req.params.id
-      if (req.body.confirmBox === 'on') { // om confirm är vald
-      // try { // kanske try över hela metoden??
+      if (req.body.confirmBox === 'on') { // If confirm box is checked.
         await Snippet.deleteOne({ _id: snippetID })
         req.session.flash = { type: 'flashSuccess', message: 'The snippet has been removed successfully.' }
         res.redirect('/crud/snippets')
-      /* } catch (err) {
-        req.session.flash = { type: 'flashError', message: err.message } // ändra till hårdkodat felmeddelande??
+      } else {
+        req.session.flash = { type: 'flashError', message: 'Removal not confirmed!' }
         res.redirect('./remove')
-
-      } */
       }
     } catch (err) {
       const error = new Error('Internal Server Error')

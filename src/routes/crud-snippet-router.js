@@ -17,7 +17,7 @@ router.get('/', controller.index)
 
 router.get('/snippets', controller.showSnippetsList)
 
-router.get('/snippets/new', controller.sessionAuthorize, controller.newSnippetGet) // fungerar endast om inloggad!
+router.get('/snippets/new', controller.sessionAuthorize, controller.newSnippetGet)
 router.post('/snippets/create', controller.sessionAuthorize, controller.newSnippetPost)
 
 router.get('/snippets/:id', controller.snippet)
@@ -28,5 +28,5 @@ router.post('/snippets/:id/update', controller.sessionAuthorize, controller.snip
 router.get('/snippets/:id/remove', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetRemove)
 router.post('/snippets/:id/delete', controller.sessionAuthorize, controller.snippetAuthorizeChanges, controller.snippetDelete)
 
-// catch 404: alltid som sista route!
+// All other pages
 router.use('*', (req, res, next) => next(createError(404)))

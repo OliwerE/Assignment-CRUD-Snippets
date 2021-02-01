@@ -20,51 +20,26 @@ import { connectDB } from './config/mongoose.js'
 const startApplication = async () => {
   const application = express()
 
-  await connectDB(application) // ansluter till databasen
+  await connectDB(application) // connects to mongoDB and configures session options
 
   const fullDirName = dirname(fileURLToPath(import.meta.url))
 
-  application.use(helmet()) // extra säkerthet med http headers för bl.a xss!
+  application.use(helmet()) // Security http headers
 
-  application.use(logger('dev')) // logg i dev format
+  application.use(logger('dev'))
 
-  // engine config:
   application.engine('hbs', hbs.express4({
     defaultLayout: join(fullDirName, 'views', 'layouts', 'default'),
     partialsDir: join(fullDirName, 'views', 'partials')
   }))
   application.set('view engine', 'hbs')
   application.set('views', join(fullDirName, 'views'))
-
   application.use(express.urlencoded({ extended: false }))
-
-  // statiska filer:
   application.use(express.static(join(fullDirName, '..', 'public')))
 
-  // Session:
+  // Session options configured in ./config/mongoose.js
 
-  // FLYTTAD TILL MONGOOSE.js
-
-  /* const sessionOptions = {
-    name: process.env.SESSION_NAME,
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24, // en dag
-      sameSite: 'lax'
-    }
-  }
-
-  if (application.get('env') === 'production') { // om i produktions server!
-    application.set('trust proxy', 1) // lita på första proxyn
-    sessionOptions.cookie.secure = true // kräv säkra kakor!
-  }
-
-  application.use(session(sessionOptions)) */
-
-  // tar bort flash messages efter en gång
+  // Removes flash message after one response
   application.use((req, res, next) => {
     if (req.session.flash) {
       res.locals.flash = req.session.flash
@@ -74,9 +49,8 @@ const startApplication = async () => {
     next()
   })
 
-  application.use('/', router) // lägger till routes
+  application.use('/', router)
 
-  // Felhantering
   application.use((err, req, res, next) => {
     if (err.status === 403) {
       return res.status(403).sendFile(join(fullDirName, 'views', 'errors', '403.html'))
@@ -89,9 +63,6 @@ const startApplication = async () => {
     if (err.status === 500) {
       return res.status(500).sendFile(join(fullDirName, 'views', 'errors', '500.html'))
     }
-
-    // dev only: ta bort sen!
-    // res.status(err.status || 500).render('errors/error', { error: err })
   })
 
   application.listen(process.env.PORT, () => {
