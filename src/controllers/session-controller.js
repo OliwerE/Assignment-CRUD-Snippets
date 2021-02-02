@@ -158,6 +158,12 @@ export class SessionController {
       const username = req.body.username
       const password = req.body.password
 
+      if (username.length === 0 || password.length === 0) { // If the username and/or password is empty
+        console.log('i if!')
+        req.session.flash = { type: 'flashError', message: 'Please enter both fields' }
+        return res.redirect('/session/register')
+      }
+
       let uniqueUsernameCheck
       if (username && password !== undefined) {
         const nameCheck = await User.find({ username: username })
