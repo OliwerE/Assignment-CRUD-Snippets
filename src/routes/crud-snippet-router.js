@@ -13,8 +13,6 @@ export const router = express.Router()
 
 const controller = new CrudSnippetController()
 
-router.get('/', controller.index)
-
 router.get('/snippets', controller.showSnippetsList)
 
 router.get('/mysnippets', controller.sessionAuthorize, controller.userSnippets)
