@@ -250,7 +250,7 @@ export class CrudSnippetController {
         viewData.isOwner = 'true'
       }
 
-      res.render('crud-Snippets/snippet', { viewData })
+      res.render('crud-snippets/snippet', { viewData })
     } catch {
       const error = new Error('Not Found')
       error.status = 404

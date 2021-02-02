@@ -78,6 +78,12 @@ export class SessionController {
       const username = req.body.username
       const password = req.body.password
 
+      if (username.length === 0 || password.length === 0) { // If the username and/or password is empty
+        console.log('i if!')
+        req.session.flash = { type: 'flashError', message: 'Please enter both fields' }
+        return res.redirect('/session/login')
+      }
+
       if (username && password !== undefined) {
         const thisUser = await User.find({ username: username }) // Finds user in the database.
         if (thisUser.length === 1) {
@@ -92,6 +98,10 @@ export class SessionController {
         // If the user is not found
         req.session.flash = { type: 'flashError', message: 'Login Failed! (401)' }
         return res.redirect('/session/login')
+      } else {
+        const error = new Error('Internal Server Error')
+        error.status = 500
+        next(error)
       }
     } catch (err) {
       const error = new Error('Internal Server Error')
