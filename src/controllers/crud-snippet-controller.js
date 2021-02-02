@@ -196,12 +196,22 @@ export class CrudSnippetController {
    * @param {object} req - The request object.
    * @param {object} res - The response object.
    * @param {Function} next - Next function.
-   * @returns {Function} - Redirects user to the snippets list.
+   * @returns {Function} - Redirects user to the snippets list or new snippet.
    */
   async newSnippetPost (req, res, next) {
     try {
       const snippetName = req.body.name
       const snippetData = req.body.snippet
+
+      if (snippetName.length === 0 || snippetData.length === 0) {
+        req.session.flash = { type: 'flashError', message: 'Enter both fields!' }
+        return res.redirect('./new')
+      }
+
+      if (snippetName.length > 25) {
+        req.session.flash = { type: 'flashError', message: 'Snippet name is too long!' }
+        return res.redirect('./new')
+      }
 
       const newSnippet = new Snippet({
         name: snippetName,
@@ -295,12 +305,23 @@ export class CrudSnippetController {
    * @param {object} req - The request object.
    * @param {object} res - The response object.
    * @param {Function} next - Next function.
+   * @returns {Function} - Redirects user to edit snippet page.
    */
   async snippetUpdate (req, res, next) {
     try {
       const snippetID = req.params.id
       const snippetName = req.body.name
       const snippetData = req.body.snippet
+
+      if (snippetName.length === 0 || snippetData.length === 0) {
+        req.session.flash = { type: 'flashError', message: 'Enter both fields!' }
+        return res.redirect('./edit')
+      }
+
+      if (snippetName.length > 25) {
+        req.session.flash = { type: 'flashError', message: 'Snippet name is too long!' }
+        return res.redirect('./edit')
+      }
 
       const _res = res
       const _req = req
