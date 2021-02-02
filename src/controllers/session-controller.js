@@ -21,12 +21,18 @@ export class SessionController {
    * @returns {Function} - Returns data to next function.
    */
   activeSessionCheck (req, res, next) {
-    if (!req.session.userName) { // If user is logged in
-      const error = new Error('Not Found')
-      error.status = 404
+    try {
+      if (req.session.userName) {
+        return next()
+      } else {
+        const error = new Error('Not Found')
+        error.status = 404
+        return next(error)
+      }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
       return next(error)
-    } else {
-      next()
     }
   }
 
@@ -39,12 +45,18 @@ export class SessionController {
    * @returns {Function} - Returns data to next function.
    */
   inactiveSessionCheck (req, res, next) {
-    if (req.session.userName) { // If user is logged out
-      const error = new Error('Not Found')
-      error.status = 404
+    try {
+      if (!req.session.userName) { // If user is logged out
+        return next()
+      } else {
+        const error = new Error('Not Found')
+        error.status = 404
+        return next(error)
+      }
+    } catch (err) {
+      const error = new Error('Internal Server Error')
+      error.status = 500
       return next(error)
-    } else {
-      next()
     }
   }
 
@@ -79,7 +91,6 @@ export class SessionController {
       const password = req.body.password
 
       if (username.length === 0 || password.length === 0) { // If the username and/or password is empty
-        console.log('i if!')
         req.session.flash = { type: 'flashError', message: 'Please enter both fields' }
         return res.redirect('/session/login')
       }
@@ -159,7 +170,6 @@ export class SessionController {
       const password = req.body.password
 
       if (username.length === 0 || password.length === 0) { // If the username and/or password is empty
-        console.log('i if!')
         req.session.flash = { type: 'flashError', message: 'Please enter both fields' }
         return res.redirect('/session/register')
       }

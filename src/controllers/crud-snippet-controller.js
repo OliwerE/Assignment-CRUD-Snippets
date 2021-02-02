@@ -22,12 +22,12 @@ export class CrudSnippetController {
    */
   sessionAuthorize (req, res, next) {
     try {
-      if (!req.session.userName) { // true is logged in
+      if (req.session.userName) { // If is logged in
+        return next()
+      } else {
         const error = new Error('Not Found')
         error.status = 404
         return next(error)
-      } else {
-        next()
       }
     } catch (err) {
       const error = new Error('Internal Server Error')
@@ -332,7 +332,6 @@ export class CrudSnippetController {
           next(error)
         }
         if (res) {
-          console.log(res)
           if (res.n === 0) {
             _req.session.flash = { type: 'flashError', message: 'Could not update snippet' }
             _res.redirect('./edit')
@@ -404,7 +403,6 @@ export class CrudSnippetController {
             next(error)
           } else if (res) {
             if (res.deletedCount === 0) {
-              console.log(err)
               _req.session.flash = { type: 'flashError', message: 'Could not remove snippet' }
               _res.redirect('./remove')
             } else if (res.deletedCount === 1) {

@@ -48,7 +48,7 @@ export const connectDB = async (application) => {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24, // en dag
+      maxAge: 1000 * 60 * 60 * 24, // One day
       sameSite: 'strict'
     },
     store: new MongoDBSessionStore({ mongooseConnection: mongoose.connection, clear_interval: 3600 })
